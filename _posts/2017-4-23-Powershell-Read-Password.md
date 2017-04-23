@@ -13,7 +13,15 @@ $credential=Get-Credential
 
 <br>
 The `Get-Credential` cmdlet returns a PSCredential object.
-You may not know this but there is a method for this object type that will enable you to retrieve the plain text value of you password.
+
+You may not know this but there is a method for this object type that will allow you to the stored password as plain text.
+
+```powershell
+$credential=Get-Credential
+$credential.GetNetworkCredential()
+
+$credential.GetNetworkCredential() | FL
+```
 
 ![_config.yml]({{ site.baseurl }}/images/getNetworkCredentials.PNG)
 
