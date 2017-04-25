@@ -1,15 +1,18 @@
 ---
 layout: post
-title: Read Passwords in PowerShell
+title: Using Passwords in PowerShell
 ---
 
-Working with passwords and credentials does not have to be scary.
+I have found that working with passwords and credentials can be intimidating.
 
-I will discuss some useful tricks when working with passwords and credentials.
-### Credential
+In my explorations in PowerShell, I have learned to enjoy working with these data types.  I have found understanding them to be very interesting and incredibly useful.
+Here are some tricks I have developed and come accross in my travels.
+
+### PSCredentials
 ----
 <br>
 PowerShell has made it incredibly easy and secure to specify and use credentials with the Get-Credential command.
+When you need to specify alternate credentials this is the way to go.
 ```powershell
 $credential=Get-Credential
 ```
@@ -18,7 +21,7 @@ $credential=Get-Credential
 <br>
 The `Get-Credential` cmdlet returns a PSCredential object.
 
-You may not know this but there is a method for this object type that will allow you to the stored password as plain text.
+You may not know this but there is a method for this object type that will allow you to extract the stored password as plain text.
 
 ```powershell
 $credential=Get-Credential
@@ -29,7 +32,7 @@ $credential.GetNetworkCredential() | FL
 
 ![_config.yml]({{ site.baseurl }}/images/getNetworkCredentials.PNG)
 
-If you need to quickly validate your credentials, this would be quite useful.
+If you need to quickly validate your credentials, this would be useful.
 <br>
 
 You can build a PSCredential object without using the `Get-Credential` cmdlet like so:
@@ -37,7 +40,7 @@ You can build a PSCredential object without using the `Get-Credential` cmdlet li
 $pass=ConvertTo-SecureString 'P@ssw0rd1' -AsPlainText -Force
 $cred=New-Object -TypeName PSCredential -ArgumentList @('codeAndKeep\Administrator',$pass)
 ```
-Not a great way to do it in terms of security, but in a dev environment, this can be handy when automating tasks.
+Not a great way to do it in terms of security, but in a dev environment this can be handy when automating tasks.
 
 <br>
 ### Working with Passwords
@@ -45,8 +48,8 @@ Not a great way to do it in terms of security, but in a dev environment, this ca
 Sometimes, there is no need to use a full PSCredential object, and all you need is a password.
 
 Generally, when specifying a password in PowerShell, the parameters only accept secure strings (this is a good thing).
-This can however get to be tedious always having to convert your password into that data type.
-Here are the most common ways of making secure strings in PowerShell.
+This can get to be tedious having to convert your password into that data type, but it is a necessary step for security. 
+Here are the 2 most common ways of making secure strings in PowerShell.
 ```powershell
 $secure=Read-Host -AsSecureString -Prompt "Password"
 # or
@@ -54,7 +57,8 @@ $secure=ConvertTo-SecureString -String "P@ssw0rd" -AsPlainText -Force
 ```
 There are pros and cons to both methods.
 <br>
-**Read-Host approach:**
+**Read-Host approach**
+
 Pros:
 1. Easy to remember
 2. Password is never in command history as clear text
@@ -63,33 +67,38 @@ Cons:
 1. Requires user input when run
 2. Cannot validate if there was a typo
 <br>
-**ConvertTo-SecureString approach:**
+
+**ConvertTo-SecureString approach**
+
 Pros:
-1. Can be used a script without user input
+1. Can be used in a script without user input
 2. Easily validate if typed correctly
+
 Cons:
 1. Password is in clear text in command history
 
 <br>
-In the ActiveDirectory world, you can reset a user's password in a one-liner (as long use you have the AD cmdlets available).
+In the ActiveDirectory world, you can reset a user's password in a one-liner (as long you have the AD cmdlets available).
 ```powershell
 Set-ADAccountPassword -Identity user -Reset -NewPassword (Read-Host -AsSecureString -Prompt "Password")
 ```
+<br>
 
-#### Read-Password
+### Function time!
 ----
 
 I am a fan of the Read-Host method of capturing passwords because it is more secure than converting from plain text.
-I'm also a fan of not mistyping passwords and accidentally locking myself out of accounts.
+On the other hand, I'm also a fan of not mistyping passwords and accidentally locking myself out of accounts.
 
-So here's a nice way of getting out clear text from a secure string.
+If only there were a way to accomplish both password validation, AND not have the password stored as clear text.
 ```powershell
 $secure=Read-Host -AsSecureString -Prompt Password
 $bstr=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
 $plain=[Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
 Write-Output $plain
 ```
-Now we can use this to prompt for a password twice, and validate that they match exactly.
+With this handy set of commands we can have our cake and eat it too, as they say.
+We can use this to prompt for a password twice, then validate that they match exactly before continuing. 
 
 ```powershell
 $pass=Read-Host -Prompt 'Enter a Password' `
@@ -109,15 +118,14 @@ if($plain -cne $plain2){
 }
 ```
 
-Now to make this into a function.
+Now to make this into a function we can do something like this:
 
 ```powershell
 function Read-Password {
-  [Security.SecureString]$pass=Read-Host -Prompt 'Enter a Password' `
+  $pass=Read-Host -Prompt 'Enter a Password' `
     -AsSecureString 
-  [Security.SecureString]$pass2=Read-Host -Prompt 'Re-type Password' `
+  $pass2=Read-Host -Prompt 'Re-type Password' `
     -AsSecureString 
-  Write-Host ''
   $bstr=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass)
   $plain=[Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
   [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
@@ -159,6 +167,15 @@ function Read-Password {
 ```
 <br>
 This is pretty rudimentary.  It has some basic password requirements hard coded into it (it would be nice to make them parameters in the future).
+These hardcoded restrictions should work with most default password policies.  Some environments might be more strict.
+
+The password requirements are as follows:
+1. 8 characters in length or longer (less than 127 characters)
+2. Must contain a capital letter
+3. Must contain a lowercase letter
+4. Must contain a number or special character
+
+If any of these conditions isn't met, an error will be written to the screen and the message will indicate all conditions that were not met (including if they do not match).
 
 <br>
 Hopefully you find this to be a useful tool to keep in your inventory.
