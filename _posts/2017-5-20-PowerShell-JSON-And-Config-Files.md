@@ -1,6 +1,6 @@
 ---
 layout: post
-title: PowerShell Configuration Files in JSON 
+title: PowerShell and JSON Configuration Files
 ---
 <p>
   If you run a lot of code in any environment, or have multiple environments that you manage,
@@ -96,8 +96,8 @@ $config=Get-Content -Path .\hypervConf.json -Raw |
 That's it.  
 <p>
   You can now manupilate this object like any PSObject in PowerShell.
-  If you wanted to use the 'templatepath' for example just type `$config.hyperv.templatepath`.
-  If you want the list of internal VMSwitches; `$config.hyperv.vmswitch.internal`.
+  If you wanted to use the 'templatepath' for example just type $config.hyperv.templatepath.
+  If you want the list of internal VMSwitches; $config.hyperv.vmswitch.internal.
 </p>
 
 <p>
