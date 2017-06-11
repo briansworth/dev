@@ -5,9 +5,20 @@ title: PowerShell Configuration Files in JSON
 
 If you run a lot of code in any environment, or have multiple environment that you manage, configuration files are incredibly useful.
 
-In the Windows world, it seems that these files are typically created in eXtensible Markup Language (XML).  Xml will work, and if you are stuck with PowerShell version 2.0 or earlier, you may run have to stick with xml.
+<p>
+  In the Windows world, it seems that these files are typically created in 
+  eXtensible Markup Language (XML).  
+  Xml will work, and if you are stuck with PowerShell version 2.0 or earlier, 
+  you may have to stick with xml.
+</p>
 
-For those of us living in a more modern world, JavaScript Object Notation (JSON) is the way to go.  It is is a much more human readable format than xml, and it is incredibly lightweight. JSON is only increasing in popularity and is simple and easy to work with.
+<p>
+  For those of us living in a more modern world, 
+  JavaScript Object Notation (JSON) is the way to go.  
+  It is is a much more human readable format than xml, 
+  and it is incredibly lightweight. 
+  JSON is only increasing in popularity and is simple and easy to work with.
+</p>
 
 Example:
 **XML**
@@ -58,8 +69,8 @@ Now let's see the same info in JSON.
   but it contains the same information in significantly fewer characters (421 vs 360; ~15% less).  
   This means less clutter, and better readability.
 </p>
-<br>
 ### Working with JSON
+----
 <p>
   I have shown you how you can create a JSON (.json) document, but how can you manipulate and
   work with these file types in PowerShell?
@@ -112,14 +123,13 @@ $configData=@"
 $config=$configData | ConvertFrom-Json
 ```
 
-##### What about xml?
+#### What about xml?
 <p>
   If you want to do the same kind of thing with xml, you can do the following.
 </p>
 ```powershell
 [xml]$config=Get-Content -Path .\hypervConf.xml
 ```
-<br>
 <p>
   Now you can manipulate this data the same way as you would any other PSObject.
 </p>
