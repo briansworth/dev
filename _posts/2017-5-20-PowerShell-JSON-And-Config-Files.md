@@ -2,14 +2,17 @@
 layout: post
 title: PowerShell Configuration Files in JSON 
 ---
-
-If you run a lot of code in any environment, or have multiple environment that you manage, configuration files are incredibly useful.
-
+<p>
+  If you run a lot of code in any environment, or have multiple environments that you manage,
+  configuration files are incredibly useful. 
+  If you do not already use them, you should seriously consider it.
+  JSON is my preferred format this task, and here is how I use it in PowerShell. 
+</p>
 <p>
   In the Windows world, it seems that these files are typically created in 
   eXtensible Markup Language (XML).  
   Xml will work, and if you are stuck with PowerShell version 2.0 or earlier, 
-  you may have to stick with xml.
+  you may have to stick with that.
 </p>
 
 <p>
@@ -18,6 +21,7 @@ If you run a lot of code in any environment, or have multiple environment that y
   It is is a much more human readable format than xml, 
   and it is incredibly lightweight. 
   JSON is only increasing in popularity and is simple and easy to work with.
+  If you haven't used it before, this should be enough to get you started.
 </p>
 
 Example:
@@ -68,12 +72,14 @@ Now let's see the same info in JSON.
   The way I have formatted this example makes it technically longer in terms of lines, 
   but it contains the same information in significantly fewer characters (421 vs 360; ~15% less).  
   This means less clutter, and better readability.
+  As you can see it is just as extensible as xml.
+  Adding and removing data is straightforward, and won't interfere with what is already there.
 </p>
 ### Working with JSON
 ----
 <p>
-  I have shown you how you can create a JSON (.json) document, but how can you manipulate and
-  work with these file types in PowerShell?
+  I have shown you how you can create a JSON (.json) document, 
+  but how can you manipulate and work with this file type in PowerShell?
 </p>  
 <p>
   I have saved this configuration file in my current working directory as hypervConf.json.
@@ -85,8 +91,8 @@ Now let's see the same info in JSON.
 ```powershell
 $config=Get-Content -Path .\hypervConf.json -Raw |
   ConvertFrom-Json
+# ConvertFrom-Json is only available by default in PSv3 and up 
 ```
-<br>
 That's it.  
 <p>
   You can now manupilate this object like any PSObject in PowerShell.
