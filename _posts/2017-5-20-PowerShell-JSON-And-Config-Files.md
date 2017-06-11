@@ -5,9 +5,9 @@ title: PowerShell Configuration Files in JSON
 
 If you run a lot of code in any environment, or have multiple environment that you manage, configuration files are incredibly useful.
 
-In the Windows world, it seems that these files are typically created in xml.  Xml will work, and if you are stuck with PowerShell version 2.0 or earlier, than you may run have to stick with xml.
+In the Windows world, it seems that these files are typically created in eXtensible Markup Language (XML).  Xml will work, and if you are stuck with PowerShell version 2.0 or earlier, you may run have to stick with xml.
 
-For those of us living in a more modern world, JSON is the way to go.  It is much easier to read, in my opinion, and takes up much less space than xml would.  This makes JSON much simpler and efficient to work with.
+For those of us living in a more modern world, JavaScript Object Notation (JSON) is the way to go.  It is is a much more human readable format than xml, and it is incredibly lightweight. JSON is only increasing in popularity and is simple and easy to work with.
 
 Example:
 **XML**
@@ -53,6 +53,73 @@ Now let's see the same info in JSON.
   }
 }
 ```
-The way I have formatted this makes it 3 lines longer in this example.
-That being said; I find this much easier to read, as there is much less clutter.  In JSON it is much easier to arrays than it is in xml (vmswitch -> internal).  
+<p>
+  The way I have formatted this example makes it technically longer in terms of lines, 
+  but it contains the same information in significantly fewer characters (421 vs 360; ~15% less).  
+  This means less clutter, and better readability.
+</p>
+<br>
+### Working with JSON
+<p>
+  I have shown you how you can create a JSON (.json) document, but how can you manipulate and
+  work with these file types in PowerShell?
+</p>  
+<p>
+  I have saved this configuration file in my current working directory as hypervConf.json.
+  If I want to actually use it, I will need to load it into memory.
+  This is where you may run into issues if you are using anything before PowerShell v3.
+  There are new(ish) Cmdlets that allow you to use JSON effectively in PowerShell v3 and up.
+</p>
 
+```powershell
+$config=Get-Content -Path .\hypervConf.json -Raw |
+  ConvertFrom-Json
+```
+<br>
+That's it.  
+<p>
+  You can now manupilate this object like any PSObject in PowerShell.
+  If you wanted to use the 'templatepath' for example just type `$config.hyperv.templatepath`.
+  If you want the list of internal VMSwitches; `$config.hyperv.vmswitch.internal`.
+</p>
+
+<p>
+  You can also load this data into memory by simply pasting it into your shell as a big string,
+  then piping it to the same command ConvertFrom-Json:
+</p>
+```powershell
+# just copy and paste this into your shell
+$configData=@"
+{
+  "hyperv": {
+    "vmpath": "V:\\VMs",
+    "templatepath": "V:\\Templates",
+    "vmswitch": {
+      "external": "External vSwitch",
+      "internal": [
+        "Internal1 vSwitch",
+        "Internal2 vSwitch"
+      ],
+      "private": "Private vSwitch"
+    },
+    "support": {
+      "email": "brian@codeAndKeep.com",
+      "phone": "555-555-5555"
+    }
+  }
+}
+"@
+$config=$configData | ConvertFrom-Json
+```
+
+##### What about xml?
+<p>
+  If you want to do the same kind of thing with xml, you can do the following.
+</p>
+```powershell
+[xml]$config=Get-Content -Path .\hypervConf.xml
+```
+<br>
+<p>
+  Now you can manipulate this data the same way as you would any other PSObject.
+</p>
