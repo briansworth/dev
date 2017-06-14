@@ -32,7 +32,7 @@ Get-Module -Name PSReadline -ListAvailable
 </p>
 
 ```powershell
-# Search for 
+# Search for it
 Find-Package -Name PSReadline
 
 # install it
@@ -92,7 +92,7 @@ New-Alias -Name vi -Value 'C:\Program Files (x86)\vim\vim80\vim.exe'
 New-Alias -Name vim -Value 'C:\Program Files (x86)\vim\vim80\vim.exe'
 
 # Include this if you like a vim command line experience
-# Set-PSReadlineOption -EditMode vi
+Set-PSReadlineOption -EditMode vi -BellStyle None
 ```
 
 Now next time you want to edit a file, instead of `notepad '.\test.txt'`, 
