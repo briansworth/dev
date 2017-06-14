@@ -10,6 +10,7 @@ title: PowerShell And Vim
   I have been fortunte enough to have been exposed to vim, and seen what it can do,
   and now there's no turning back.
 </p> 
+
 <p>
   There has been a module for PowerShell for a while now that allows you to use
   a vi style editor on the command line.  Previously you would have had to
