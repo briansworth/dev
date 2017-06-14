@@ -25,6 +25,7 @@ title: PowerShell And Vim
 ```powershell
 Get-Module -Name PSReadline -ListAvailable
 ```
+
 <p>
   If you don't get any results then it's not installed.
   You can install it like so:
@@ -55,7 +56,6 @@ Set-PSReadlineOption -EditMode vi
   If you want this set by default you can add this to your profile 
   so it loads automatically.
 </p>
-<br>
 
 ### VIM on Windows
 ----
@@ -147,10 +147,10 @@ set ruler
 " Color scheme I found that works best with PowerShell
 colorscheme shine
 
-" If using set ruler and colorscheme shine, sets the line number color to grey
+" helpful if using 'set ruler' and 'colorscheme shine', makes lineNumbers grey
 " Same example from http://vim.wikia.com/wiki/Display_line_numbers
 highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE guifg=DarkGrey guibg=NONE
 
-" Disable bell sounds when hitting esc multiple times
+" Disable bell sounds 
 set noerrorbells visualbell t_vb=
 ```
