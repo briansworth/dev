@@ -21,6 +21,7 @@ title: PowerShell And Vim
 <p>
   You can check with one command.
 </p>
+
 ```powershell
 Get-Module -Name PSReadline -ListAvailable
 ```
@@ -28,6 +29,7 @@ Get-Module -Name PSReadline -ListAvailable
   If you don't get any results then it's not installed.
   You can install it like so:
 </p>
+
 ```powershell
 # Search for 
 Find-Package -Name PSReadline
@@ -35,6 +37,7 @@ Find-Package -Name PSReadline
 # install it
 Install-Package -Name PSReadline
 ```
+
 <p>
   If you haven't setup NuGet previously, you can follow the onscreen instructions
   to get it setup and configured.
@@ -42,14 +45,17 @@ Install-Package -Name PSReadline
 <p>
   Now that you have that installed, you can setup your command line editor in vi mode:
 </p>
+
 ```powershell
 Set-PSReadlineOption -EditMode vi
 # I like to also add -BellStyle 'None' because I hate the bell sound
 ```
+
 <p>
   If you want this set by default you can add this to your profile 
   so it loads automatically.
 </p>
+<br>
 
 ### VIM on Windows
 ----
@@ -63,6 +69,7 @@ Set-PSReadlineOption -EditMode vi
 Invoke-WebRequest -Uri https://ftp.nluug.nl/pub/vim/pc/gvim80-586.exe `
   -Outfile ~\Downloads\gvim80-586.exe
 ```
+
 <p>
   This is a self installing exe, so all you need to do is run it and customize
   it as you will.
@@ -83,6 +90,9 @@ Invoke-WebRequest -Uri https://ftp.nluug.nl/pub/vim/pc/gvim80-586.exe `
 # Add these lines to your $PROFILE
 New-Alias -Name vi -Value 'C:\Program Files (x86)\vim\vim80\vim.exe'
 New-Alias -Name vim -Value 'C:\Program Files (x86)\vim\vim80\vim.exe'
+
+# Include this if you like a vim command line experience
+# Set-PSReadlineOption -EditMode vi
 ```
 
 Now next time you want to edit a file, instead of `notepad '.\test.txt'`, 
@@ -115,7 +125,8 @@ vi $vimrc
 <p>
   This is a start; hopefully you can build on this and improve on it.
 </p>
-```
+
+```vim
 " Enable syntax highlighting
 syntax on
 
