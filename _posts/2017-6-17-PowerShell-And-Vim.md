@@ -122,9 +122,6 @@ vi $vimrc
   PowerShell's color scheme.
 </p>
 
-<p>
-  This is a start; hopefully you can build on this and improve on it.
-</p>
 
 ```vim
 " Enable syntax highlighting
@@ -154,3 +151,7 @@ highlight LineNr term=bold cterm=NONE ctermfg=DarkGrey ctermbg=NONE gui=NONE gui
 " Disable bell sounds 
 set noerrorbells visualbell t_vb=
 ```
+
+<p>
+  This is a start; hopefully you can build on this and improve on it.
+</p>
