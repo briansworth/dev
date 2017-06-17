@@ -11,6 +11,9 @@ title: PowerShell And Vim
   and now there's no turning back.
 </p> 
 
+### VI on the Command Line
+----
+
 <p>
   There has been a module for PowerShell for a while now that allows you to use
   a vi style editor on the command line.  Previously you would have had to
@@ -25,9 +28,14 @@ title: PowerShell And Vim
 ```powershell
 Get-Module -Name PSReadline -ListAvailable
 ```
-
 <p>
   If you don't get any results then it's not installed.
+</p>
+If you have a version number 1.1 or prior, 
+then you will need to upgrade the version to 1.2 or higher:
+![_config.xml]({{ site.baseurl }}/images/psReadlineVersion.png)
+
+<p>
   You can install it like so:
 </p>
 
@@ -35,8 +43,8 @@ Get-Module -Name PSReadline -ListAvailable
 # Search for it
 Find-Package -Name PSReadline
 
-# install it
-Install-Package -Name PSReadline
+# install it with -Force to overwrite the older version if you have it
+Install-Package -Name PSReadline -Force
 ```
 
 <p>
