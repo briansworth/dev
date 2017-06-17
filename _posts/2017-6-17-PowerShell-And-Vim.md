@@ -33,8 +33,9 @@ Get-Module -Name PSReadline -ListAvailable
 </p>
 If you have a version number 1.1 or prior, 
 then you will need to upgrade the version to 1.2 or higher:
+<br>
 ![_config.xml]({{ site.baseurl }}/images/psReadlineVersion.png)
-
+<br>
 <p>
   You can install it like so:
 </p>
