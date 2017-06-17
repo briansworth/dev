@@ -57,7 +57,7 @@ Install-Package -Name PSReadline -Force
 </p>
 
 ```powershell
-Set-PSReadlineOption -EditMode vi
+Set-PSReadlineOption -EditMode vi -BellStyle None
 # I like to also add -BellStyle 'None' because I hate the bell sound
 ```
 
@@ -68,6 +68,7 @@ Set-PSReadlineOption -EditMode vi
 
 ### VIM on Windows
 ----
+
 <p>
   Now that you have your command line setup with vi, now you can setup the real thing.
   You can download Vim for Windows [here](www.vim.org/download.php), or
@@ -107,7 +108,7 @@ Set-PSReadlineOption -EditMode vi -BellStyle None
 Now next time you want to edit a file, instead of `notepad '.\test.txt'`, 
 do `vi test.txt`.
 
-#### Customize your vimrc file
+### Customize your vimrc file
 -----
 <p>
   There should be a a file named "vimrc" in your user directory.  
