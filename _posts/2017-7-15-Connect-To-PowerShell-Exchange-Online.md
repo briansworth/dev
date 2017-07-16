@@ -92,3 +92,7 @@ function Connect-ExchangeOnline {
 
   You can also AllowClobber if you want to overwrite your Exchange cmdlets.
 </p>
+<p>
+  If you work with Exchange Online regularly, I would recommend putting 
+  this function into your PowerShell profile so it is always ready to go.
+</p>
