@@ -10,11 +10,9 @@ title: Connect PowerShell to Exchange Online
   and better insight into the process.
 </p>
 
-<p>
-  The process consists of 2 steps:
-  1. Creating a PSSession to Exchange Online
-  2. Importing that PSSession
-</p>
+The process consists of 2 steps:
+1. Creating a PSSession to Exchange Online
+2. Importing that PSSession
 
 ```powershell
 $session=New-PSSession -ConfigurationName 'Microsoft.Exchange' `
@@ -31,17 +29,23 @@ Import-PSSession $session
   but you may want some additional features.
 </p>
 
-#### Additional Considerations
-I like to differentiate the Exchange Online cmdlets vs
-the OnPrem Exchange cmdlets.  
-To do this, I simply add a prefix to the Exchange Online cmdlets.
+### Additional Considerations
+----
 
-Adding a prefix will allow you to, at a glance, determine 
-where your code is intended to run.
-It also means that you can use both Exchange Online and OnPrem Exchange
-cmdlets in the same shell.
-
-With that in mind, here's what I have come up with:
+<p>
+  I like to differentiate the Exchange Online cmdlets vs
+  the OnPrem Exchange cmdlets.  
+  To do this, I simply add a prefix to the Exchange Online cmdlets.
+</p>
+<p>
+  Adding a prefix will allow you to, at a glance, determine 
+  where your code is intended to run.
+  It also means that you can use both Exchange Online and OnPrem Exchange
+  cmdlets in the same shell.
+</p>
+<p>
+  With that in mind, here's what I have come up with:
+</p>
 
 ```powershell
 function Connect-ExchangeOnline {
@@ -82,7 +86,9 @@ function Connect-ExchangeOnline {
   Import-PSSession @importParam
 }
 ```
-The -Prefix parameter allows you to set one your self based on your needs.
-The 'AllowNull' attribute will let you specify null if you don't want a prefix.
+<p>
+  The -Prefix parameter allows you to set one your self based on your needs.
+  The 'AllowNull' attribute will let you specify null if you don't want a prefix.
 
-You can also AllowClobber if you want to overwrite your Exchange cmdlets.
+  You can also AllowClobber if you want to overwrite your Exchange cmdlets.
+</p>
