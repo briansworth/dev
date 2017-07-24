@@ -11,7 +11,8 @@ title: Building an Exchange 2016 Lab on Server 2016
   and document with code.
 </p>
 
-### The plan
+### The Plan
+----
 I will be building 2 VMs on Hyper-V:
 * 1 Domain Controller - Server core 2016
 * 1 Exchange Server - Server 2016 (with GUI)
@@ -167,10 +168,10 @@ Rename-Computer -NewName exEX1 -Restart
 
 After reboot, join the domain from above:
 ```powershell
-[String]$exIP='10.10.0.6'
+[String]$exIP='10.0.0.6'
 
-[String]$dcIP='10.10.0.5'
-[String]$gateway='10.10.0.1'
+[String]$dcIP='10.0.0.5'
+[String]$gateway='10.0.0.1'
 
 [PSObject]$netAdapter=Get-NetAdapter -Name 'Ethernet*'
  $netAdapter | New-NetIPAddress -IPAddress $exIP `
@@ -285,7 +286,7 @@ the Exchange setup can finally begin.
 # Initialize and create new volume using added vhd file when creating vm
 Initialize-Disk -Number 1 -PartitionStyle mbr -PassThru | 
   New-Partition -UseMaximumSize -DriveLetter M | 
-    Format-Volume -FileSystem NTFS -NewFileSystemLabel MXDB1
+    Format-Volume -FileSystem NTFS -NewFileSystemLabel MXDB01
     
 [String]$fileName='ExchangeServer2016-x64-cu4.iso'
 $vol=Mount-DiskImage -ImagePath "$HOME\Downloads\$fileName" -PassThru | Get-Volume
