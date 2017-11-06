@@ -66,9 +66,9 @@ gwmi Win32Reg_AddRemovePrograms
 The 2 locations are as follows:
 
 1. HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\ 
-* For 32-bit applications
+  * For 32-bit applications
 2. HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\
-* For 64-bit applications
+  * For 64-bit applications
 
 ```powershell
 $paths=@(
