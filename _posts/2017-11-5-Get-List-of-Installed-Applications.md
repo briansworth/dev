@@ -4,34 +4,36 @@ title: Get List of Installed Applications
 ---
 
 <p>
-  Getting a list of installed applications like something 
-  a lot of admin would like to do.<br>
+  Getting a list of installed applications seems like something 
+  a lot of Windows admins would like to do.<br>
   Unfortuneately, there isn't an Out-of-the-Box way to do this with PowerShell.
 </p>
 
 ### Common ways of listing applications
+
+#### Win32_Product
 <p>
-  The most common method that I have seen is a simple Wmi call to the
+  The most common method that I have seen is a simple WMI query to the
   Win_Product class.
 </p>
+
 ```powershell
 gwmi Win32_Product
 ```
+
 <p>
   The first thing you will notice about this method, 
   is that it takes a very long time to populate the list.
   Also, this will only retreive MSI installed applications.
-  Anything installed by another method (exe) will not show up here.
+  Anything installed by another method (like exe) will not show up here.
 </p>
 
-#### A faster way
-There is another class that is much better than the above; but,
+#### Win32Reg_AddRemoveProduct
+This class is much better than the above; but,
 it will **only exist if your machine or the target machine has
 an SCCM/SMS client installed on it.**<br>
-The class is Win32Reg_AddRemovePrograms 
-(there is also Win32Reg_AddRemovePrograms64).
 This class is much faster at retrieve this info, 
-although I have not used it very much.
+although I have not used it very much because of this prerequisite.
 
 ```powershell
 gwmi Win32Reg_AddRemovePrograms
@@ -44,7 +46,7 @@ gwmi Win32Reg_AddRemovePrograms
   and use alternate credentials.
 </p>
 
-### The better way
+### The Better Way
 <p>
   The better way to get this information would be to use the registry.
   When an application is installed (the Windows way), 
@@ -73,20 +75,20 @@ foreach($path in $paths){
       Select DisplayName, Publisher, InstallDate, DisplayVersion
 }
 ```
-*You may want to use Format-List.*
+*You may want to use Format-List to view the data nicely.*
 <br>
 
 <p>
   As you can see, this is both fast and simple.
   There are many other properties you can select as well.
-  If you environment is setup to use PowerShell remoting,
-  You can simply pass the example above to the Invoke-Command command.
+  If your environment is setup to use PowerShell remoting,
+  you can simply pass the example above to the Invoke-Command command.
 </p>
 
 <p>
   In environments that do not have PowerShell remoting setup,
   there is a way to connect to a remote registry on other machines.
-  It isn't as straightforward, so I have made it into a nice function,
+  It isn't as straightforward, so I have made it into a nice function
   that should take out that complexity.
 </p>
 
@@ -221,4 +223,3 @@ Get-InstalledApplication -ComputerName server1,server2,server3 `
   -IdentifyingNumber {5FCE6D76-F5DC-37AB-B2B8-22AB8CEDB1D4}
 ```
 If you know the guid of an application, you can specify IdentifyingNumber.
-
