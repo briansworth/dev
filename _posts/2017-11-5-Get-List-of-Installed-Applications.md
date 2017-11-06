@@ -10,6 +10,7 @@ title: Get List of Installed Applications
 </p>
 
 ### Common ways of listing applications
+-----
 
 #### Win32_Product
 <p>
@@ -39,6 +40,7 @@ although I have not used it very much because of this prerequisite.
 gwmi Win32Reg_AddRemovePrograms
 ```
 
+------
 <p>
   The great thing about these methods is that they use the
   Get-WmiObject command.
@@ -46,7 +48,10 @@ gwmi Win32Reg_AddRemovePrograms
   and use alternate credentials.
 </p>
 
+<br>
+
 ### The Better Way
+-----
 <p>
   The better way to get this information would be to use the registry.
   When an application is installed (the Windows way), 
@@ -59,10 +64,10 @@ gwmi Win32Reg_AddRemovePrograms
   it is not too difficult to get this information with Get-ChildItem.
 </p>
 The 2 locations are as follows:
-- HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\ 
-  - For 32-bit applications
-- HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\
-  - For 64-bit applications
+1 HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\ 
+  * For 32-bit applications
+2 HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\
+  * For 64-bit applications
 
 ```powershell
 $paths=@(
