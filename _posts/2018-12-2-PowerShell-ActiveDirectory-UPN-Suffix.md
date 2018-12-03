@@ -179,10 +179,13 @@ Function New-ADContext {
       'ApplicationPartition',
       'DirectoryServer'
     )]
+    [Parameter(Position=0)]
     [String]$contextType='Forest',
 
+    [Parameter(Position=1)]
     [String]$targetName,
 
+    [Parameter(Position=2)]
     [Management.Automation.PSCredential]$credential
   )
   $ctorArgs=@($contextType)
@@ -197,17 +200,46 @@ Function New-ADContext {
     -ArgumentList $ctorArgs
 }
 
+Function Get-LdapEntry {
+  [CmdletBinding()]
+  Param(
+    [Parameter(Mandatory=$true,Position=0)]
+    [String]$distinguishedName,
+
+    [Parameter(Position=1)]
+    [String]$server,
+
+    [Parameter(Position=2)]
+    [Management.Automation.PSCredential]$credential
+  )
+  Try{
+    $strBuilder=New-Object -TypeName Text.StringBuilder `
+      -ArgumentList 'LDAP://'
+    if($PSBoundParameters.ContainsKey('server')){
+      [void]$strBuilder.Append("$server/")
+    }
+    [void]$strBuilder.Append($distinguishedName)
+    $ctorArgs=@(
+      $strBuilder.ToString()
+    )
+    if($PSBoundParameters.ContainsKey('credential')){
+      $ctorArgs+=$credential.UserName
+      $ctorArgs+=$credential.GetNetworkCredential().Password
+    }
+    New-Object -TypeName DirectoryServices.DirectoryEntry `
+      -ArgumentList $ctorArgs
+  }Catch{
+    Write-Error $_
+  }
+}
+
 $forestCtx=New-ADContext -contextType Forest `
   -targetName $forestname `
   -credential $forestCred
 
 $forest=[DirectoryServices.ActiveDirectory.Forest]::GetForest($forestCtx)
-$rootDse=New-Object -TypeName DirectoryServices.DirectoryEntry `
-  -ArgumentList @(
-    "LDAP://$($forest.Name)/rootDse",
-    $forestCred.UserName,
-    $forestCred.GetNetworkCredential().Password
-  )
+$rootDse=Get-LdapEntry -distinguishedName rootDse `
+  -credential $forestCred
 
 $cfgCtx=$rootDse.Properties['configurationNamingContext'].Value
 
