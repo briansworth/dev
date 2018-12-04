@@ -226,34 +226,118 @@ Function Get-LdapEntry {
       $ctorArgs+=$credential.UserName
       $ctorArgs+=$credential.GetNetworkCredential().Password
     }
-    New-Object -TypeName DirectoryServices.DirectoryEntry `
+    $entry=New-Object -TypeName DirectoryServices.DirectoryEntry `
       -ArgumentList $ctorArgs
+    Write-Output $entry
   }Catch{
     Write-Error $_
   }
 }
 
-$forestCtx=New-ADContext -contextType Forest `
-  -targetName $forestname `
-  -credential $forestCred
+Function Get-LdapPartitionsEntry {
+  [CmdletBinding()]
+  Param(
+    [Parameter(Position=0)]
+    [String]$server,
 
-$forest=[DirectoryServices.ActiveDirectory.Forest]::GetForest($forestCtx)
-$rootDse=Get-LdapEntry -distinguishedName rootDse `
-  -credential $forestCred
-
-$cfgCtx=$rootDse.Properties['configurationNamingContext'].Value
-
-$partitionsEntry=New-Object -TypeName DirectoryServices.DirectoryEntry `
-  -ArgumentList @(
-    "LDAP://$($forest.Name)/CN=Partitions,$cfgCtx",
-    $forestCred.Username,
-    $forestCred.GetNetworkCredential().Password
+    [Parameter(Position=1)]
+    [Management.Automation.PSCredential]$credential
   )
+  $params=$PSBoundParameters
+  $params.ErrorAction='Stop'
+  Try{
+    $rootDse=Get-LdapEntry @params -distinguishedName 'rootDse'
+    if(!($rootDse.Path)){
+      Write-Error "Unable to get forest naming context. Verify credentials" `
+        -ErrorAction Stop
+    }
+    $cfgCtx=$rootDse.Properties['configurationNamingContext'].Value
+    $cfgEntry=Get-LdapEntry @params -distinguishedName $cfgCtx
+    $searcher=New-Object -TypeName DirectoryServices.DirectorySearcher `
+      -ArgumentList $cfgEntry, 'objectCategory=crossRefContainer'
+    $partitionsEntry=$searcher.FindOne()
+    if(!($partitionsEntry.Path)){
+      Write-Error "Partitions container not found" `
+        -ErrorAction Stop
+    }
+    Write-Output $partitionsEntry
+  }Catch{
+    Write-Error $_
+  }
+}
 
-$upnSuffixes=$partitionsEntry.Properties['uPNSuffixes']
-New-Object -TypeName PSObject -Property @{
-  ForestName=$forest.Name;
-  Domains=$forest.Domains;
-  UPNSuffixes=$upnSuffixes;
+Function GetADForest {
+  [CmdletBinding()]
+  Param(
+    [Parameter(Position=0)]
+    [String]$forestName,
+
+    [Parameter(Position=1)]
+    [Management.Automation.PSCredential]$credential
+  )
+  $params=@{'ErrorAction'='Stop';}
+  if($PSBoundParameters.ContainsKey('credential')){
+    $params.Add('credential',$credential)
+  }
+  if($PSBoundParameters.ContainsKey('forestName')){
+    $params.Add('targetName',$forestName)
+  }
+  Try{
+    $forestCtx=New-ADContext @params -contextType Forest
+    [DirectoryServices.ActiveDirectory.Forest]::GetForest($forestCtx)
+  }Catch{
+    Write-Error $_
+  }
+}
+
+Function Get-UPNSuffixes {
+  [CmdletBinding()]
+  Param(
+    [Parameter(Position=0)]
+    [String]$ForestName,
+
+    [Parameter(Position=1)]
+    [String]$Server,
+
+    [Parameter(Position=2)]
+    [Management.Automation.PSCredential]$Credential
+  )
+  Try{
+    $forestParam=@{'ErrorAction'='Stop';}
+    $partitionParam=@{'ErrorAction'='Stop';}
+
+    if($PSBoundParameters.ContainsKey('Credential')){
+      $forestParam.Add('credential',$Credential)
+      $partitionParam.Add('credential',$Credential)
+    }
+
+    if($PSBoundParameters.ContainsKey('Server') -and
+      !($PSBoundParameters.ContainsKey('ForestName'))){
+      $forestParam.Add('forestName',$Server)
+    }elseif($PSBoundParameters.ContainsKey('ForestName') -and
+      !($PSBoundParameters.ContainsKey('Server'))){
+      $partitionParam.Add('server',$ForestName)
+    }
+
+    if($PSBoundParameters.ContainsKey('ForestName')){
+      $forestParam.Add('forestName',$ForestName)
+    }
+    if($PSBoundParameters.ContainsKey('Server')){
+      $partitionParam.Add('server',$Server)
+    }
+
+    $forest=GetADForest @forestParam
+
+    $partitionsEntry=Get-LdapPartitionsEntry @partitionParam
+
+    $upnSuffixes=$partitionsEntry.Properties['uPNSuffixes']
+    New-Object -TypeName PSObject -Property @{
+      ForestName=$forest.Name;
+      Domains=$forest.Domains;
+      UPNSuffixes=$upnSuffixes;
+    }
+  }Catch{
+    Write-Error $_
+  }
 }
 ```
