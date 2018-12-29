@@ -33,7 +33,7 @@ title: PowerShell - Automate SCCM PreReq Downloads
   the ADK files, and if required, the ADK WinPE Addon files.
 </p>
 
-#### What you need to run it
+#### What you need
 ----
 
 <p>
@@ -67,7 +67,7 @@ title: PowerShell - Automate SCCM PreReq Downloads
 <p>
   I would recommend copying all the code below, 
   pasting it into a text editor, 
-  then saving it as a ps1 file.
+  then saving it as a ps1 file (SccmPreReqDl.psq for example).
 </p>
 *NOTE: There will be some examples below the code here*
 ```powershell
