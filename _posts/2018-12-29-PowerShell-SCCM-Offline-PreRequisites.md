@@ -5,7 +5,7 @@ title: PowerShell - Automate SCCM PreReq Downloads
 
 <p>
   I have recently started working with SCCM, 
-  which means building (and rebuilding) lab environments with it. 
+  which means building (and rebuilding) lab environments for it. 
   I have found that just getting all the prerequisites installed can be 
   tedious and time consuming. 
   Even more so when your SCCM server is not connected to the internet.
@@ -49,18 +49,17 @@ title: PowerShell - Automate SCCM PreReq Downloads
     <ul>
       <li>Downloaded from Microsoft</li>
     </ul>
-    <li>ADKWinPeSetup.exe</li>
+      <li>ADKWinPeSetup.exe</li>
     <ul>
       <li>Optional: The script will tell you if it is needed</li>
     </ul>
   </ol>
 </p>
 <p>
-  With your environment ready, you are ready to run the script. 
+  With your environment ready, you can run the script. 
   Make sure you execute the script from the directory containing the 
   adksetup.exe file (and adkwinpesetup.exe file if required).
 </p>
-</br>
 
 ### Full Script
 ----
@@ -196,7 +195,6 @@ Try{
 ```
 
 #### Example 1
-----
 
 ```powershell
 .\SccmPreReqDl.ps1 -sccmInstallSource D:\ -prereqTargetPath C:\temp\sccmPreReqs
@@ -208,7 +206,6 @@ Try{
 </p>
 
 #### Example 2
-----
 
 ```powershell
 .\SccmPreReqDl.ps1 -sccmInstallSource C:\Temp\SccmExtracted -Verbose
