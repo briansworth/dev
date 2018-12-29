@@ -221,7 +221,7 @@ Try{
 ----
 <p>
   I will be writing a Part 2 to this post that can handle the install.  
-  See below if you want to do it youself.
+  See below if you want to do it yourself.
 </p>
 <p>
   In short; you just need to copy the folder over to the SCCM server. 
