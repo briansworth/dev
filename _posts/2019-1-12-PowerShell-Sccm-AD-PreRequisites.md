@@ -1,16 +1,16 @@
 ---
 layout: post
-title: PowerShell - Automate SCCM PreReq Install
+title: PowerShell - Automate SCCM AD PreReqs
 ---
 
-This is a continuation of automating Sccm prerequisite installs [part 1](
+This is a continuation of automating Sccm prerequisites [part 1](
 http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites/) and 
 [part 2](
 http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites-Install/). 
 <p>
   This post will be about setting up the Active Directory prerequisites. 
   Specifically creating the System Management container and adding the 
-  permissions to that container. 
+  relevant permissions to that container. 
   I will not be tackling the AD Schema extension. 
   The executable in the Sccm installation media (ExtADSch.exe) does the job 
   perfectly and quickly. 
@@ -18,7 +18,7 @@ http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites-Install/).
 <p>
   Just as in my previous Sccm prereq posts, 
   I will be writing a full script for the process. 
-  There will of course be examples at the end of the post as well. 
+  There will be examples at the end of the post as well. 
   Jump to the end for the script, 
   or go through the journey of figuring it out with me.
 </p>
@@ -59,7 +59,7 @@ New-ADObject -Name 'System Management' `
 
 <p>
   This should work assuming you have a separate domain / forest named 
-  trustme.local, and you have a trust relationship to that domain. 
+  trustme.local, and you can contact that domain. 
 </p>
 <br>
 
@@ -108,7 +108,7 @@ $systemMgtEntry
 <p>
   This was always the part I was scared of. 
   Security and permissions have always seemed a bit daunting. 
-  Expecially with all the different security permissions you can 
+  Especially with all the different security permissions you can 
   setup for an AD container. 
   The nice thing with the ActiveDirectory module, 
   is that you can use the same cmdlets to get / set permissions 
@@ -121,11 +121,11 @@ $systemMgtEntry
   I have opted to go the different route, 
   and use DirectoryServices to get the job done. 
   I want to assume the Active Directory module is not available, 
-  and that I can just run the script directory from the Sccm server. 
+  and that I can run the script directly from the Sccm server. 
 </p>
 <br>
 <p>
-  First lets take a look at what permissions are set on the container.
+  Lets take a look at what permissions are set on the container.
 </p>
 
 ```powershell
@@ -139,6 +139,7 @@ $systemMgtEntry.ObjectSecurity.GetAccessRules(
   'ActiveDirectoryRights' and 'IdentityReference'. 
   This should tell what access is given to whom.
 </p>
+<br>
 <p>
   Now to add permissions for the Sccm server.
 </p>
@@ -150,13 +151,13 @@ $systemMgtEntry.ObjectSecurity.GetAccessRules(
   $cmComputer=New-Object -TypeName DirectoryServices.DirectoryEntry `
     -ArgumentList "LDAP://CN=$computerName,CN=Computers,$rootName"
 
-  # We will need the Security Identifier (SID) for the Sccm AD Computer
+  # We need the Security Identifier (SID) for the Sccm AD Computer
   [byte[]]$cmSidBytes=$cmComputer.Properties['objectsid'][0]
   $cmSid=New-Object -TypeName Security.Principal.SecurityIdentifier `
     -ArgumentList $cmSidBytes, 0
   
 
-  # Now we need to create the Access Control Entry (ACE) for the Sccm computer
+  # Create the Access Control Entry (ACE) for the Sccm computer
   $adRights=[DirectoryServices.ActiveDirectoryRights]::GenericAll
   $accessType=[Security.AccessControl.AccessControlType]::Allow
   $inheritance=[DirectoryServices.ActiveDirectorySecurityInheritance]::All
@@ -175,13 +176,13 @@ $systemMgtEntry.ObjectSecurity.GetAccessRules(
   for your Sccm server on the System Management container. 
 </p>
 
-#### A Couple Problems
+#### A couple problems
 ----
 
 <p>
   As mentioned before, 
   this get more complicated when you want to do this for a remote domain. 
-  Even more so if the domain and the 
+  Even more so if the target domain and the 
   Sccm server are in separate domains or forests. 
   Additionally, this will make the use of credentials a requirement. 
   Again, I want to be able to run this script directly from my Sccm server, 
@@ -417,6 +418,12 @@ Try{
 ```
 
 <br>
+
+<p>
+  When running the script, 
+  I highly recommend using the -Verbose switch to see what it is doing. 
+  It will make troubleshooting easier if you run into problems.  
+</p>
 
 #### Example 1
 
