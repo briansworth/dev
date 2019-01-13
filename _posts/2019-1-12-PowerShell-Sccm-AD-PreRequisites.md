@@ -76,7 +76,7 @@ New-ADObject -Name 'System Management' `
 <p>
   To accomplish this, we can leverage the DirectoryServices .Net namespace. 
   If you haven't explored what you can do with this, you are missing out. 
-  I will primarily be using the DirectoryEntry object type as you will see.
+  I will primarily be using the DirectoryEntry object as you will see.
 </p>
 
 ```powershell
