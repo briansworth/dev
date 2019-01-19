@@ -54,10 +54,13 @@ http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites/
         <li>Download from PowerShell Gallery, directly from PowerShell</li>
       </ul>
     <li>Sql Installation Media</li>
+      <ul>
+        <li>Mount or extract ISO on target server</li>
+      </ul>
   </ol>
 </p>
 
-##### Check your PowerShell version:
+#### Check your PowerShell version:
 
 ```powershell
 $PSVersionTable
@@ -67,7 +70,6 @@ Name                           Value
 PSVersion                      5.1.17134.407
 PSEdition                      Desktop
 PSCompatibleVersions           {1.0, 2.0, 3.0, 4.0...}
-BuildVersion                   10.0.17134.407
 
 # if you see PSVersion start with 5, you are on v5
 ```
@@ -77,8 +79,9 @@ If you aren't on PSv5, download and install WMF 5.1
 and download and install the PowerShell package manager 
 [here](https://www.microsoft.com/en-us/download/details.aspx?id=51451)
 
+<br>
 
-##### Get the SqlServerDsc module
+#### Get the SqlServerDsc module
 
 <p>
   You should be able to run 'Find-Module -Name SqlServerDsc' and 
@@ -104,30 +107,35 @@ Find-Module -Name SqlServerDsc | Install-Module
 ```
 
 <p>
-  If you need to download it from a separate computer do the following: 
+  If you need to download it first and copy to another computer:
 </p>
 
 ```powershell
 # Choose where to save the module
-
 $path='C:\temp\SqlDsc'
+
 Save-Module -Name SqlServerDsc -Path $path
 ```
 
 <p>
-  Now you can copy that folder location to your server and place it here: 
+  Now you can copy the SqlServerDsc folder 
+  location to your server and place it here: 
   C:\Program Files\WindowsPowerShell\Modules\
 </p>
 
 ```powershell
 # Should look something like this
 C:\Program Files\WindowsPowerShell\Modules\SqlServerDsc
-|--- 12.2.0.0
-  |-- DSCResources
-  ....
+ - 12.2.0.0
+   - DSCResources
+   - en-US
+   - Examples
+   - sv-SE
+   - Tests
+ ...
 ```
 
-##### Test SqlServerDsc module installation
+#### Test SqlServerDsc module installation
 
 ```powershell
 Get-DscResource -Module SqlServerDsc
@@ -145,14 +153,16 @@ PowerShell      SqlDatabaseDefaultLoca... SqlServerDsc                   12.2.0.
 ...
 ```
 
+<br>
+
 ```powershell
 configuration SccmSqlInstallation {
   Param(
     [Parameter(Position=0)]
-    [String]$computerName=$ENV:COMPUTERName,
+    [String]$computerName=$ENV:COMPUTERNAME,
 
-    [Parameter(Position=1)]
-    [String]$sqlSourceFiles='C:\sql2016',
+    [Parameter(Position=1,Mandatory=$true)]
+    [String]$sqlSourceFiles,
     
     [Parameter(Position=2)]
     [String]$sqlInstanceName='MSSQLSERVER',
