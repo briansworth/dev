@@ -282,11 +282,14 @@ $config = @{
 }
 ```
 
+#### Generate the MOF
 
 ```powershell
 # Customize your parameters to match your environment
 
-$svcCred=Get-Credential
+# not required if you don't want service accounts
+# remove the params with this variable if you don't want this set
+$svcCred=Get-Credential 
 
 SccmSqlInstallation -OutputPath C:\temp\sqlInstall `
   -computer sql `
@@ -298,9 +301,17 @@ SccmSqlInstallation -OutputPath C:\temp\sqlInstall `
   -agentSvcCredential $svcCred `
   -features "SQLENGINE,RS"
 
+# SQLENGINE to install the database engine
+# RS will install the reporting services
+
+# You do not need to specify service account credentials 
+# for Sccm to work
 ```
+
+#### Push it real good
+
 <p>
-  Finally we can push the configuration to the computer 
+  Finally we can push the configuration to the server 
   and watch the magic happen. 
 </p>
 
@@ -309,6 +320,12 @@ SccmSqlInstallation -OutputPath C:\temp\sqlInstall `
 # with certificate encryption
 Set-DscLocalConfigurationManager -Path C:\temp\sqlInstall
 
-Start-DscConfiguration -Path C:\temp\sqlInstall -Force -verbose -wait
+Start-DscConfiguration -Path C:\temp\sqlInstall -Wait -Force -Verbose
 ```
-
+<p>
+  This is prone to have errors if you have misconfigured something.  
+  You can check the Sql Installation Summary file for insight into 
+  any errors you get. 
+  Generally located here: 
+  %ProgramFiles%\Microsoft SQL Server\<Version>\Setup Bootstrap\Log\Summary.txt
+</p>
