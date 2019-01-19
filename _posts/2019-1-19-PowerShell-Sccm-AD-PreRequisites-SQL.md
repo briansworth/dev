@@ -89,9 +89,9 @@ and download and install the PowerShell package manager
 ```powershell
 Find-Module -Name SqlServerDsc
 
-Version    Name                                Repository           Description
--------    ----                                ----------           -----------
-12.2.0.0   SqlServerDsc                        PSGallery            Module with DSC Resources...
+Version    Name            Repository     Description
+-------    ----            ----------     -----------
+12.2.0.0   SqlServerDsc    PSGallery      Module with DSC Resources...
 ```
 <p>
   If the server you are installing Sql on has internet access, 
@@ -159,9 +159,9 @@ PowerShell      SqlDatabaseDefaultLoca... SqlServerDsc                   12.2.0.
 ----
 
 <p>
-  I have broken the code into different components. 
+  I have broken the code into it's different components. 
   First is the 'configuration' which is just like a PowerShell function. 
-  Just like a function it has parameters that you can specify and 
+  It has parameters that you can specify and 
   you run it the same as you would a function.
 </p>
 <p>
@@ -289,15 +289,19 @@ $config = @{
 
 #### Generate the MOF
 
-```powershell
-# Customize your parameters to match your environment
+<p>
+  It is here where you can customize how Sql will install. 
+  You can remove the service accounts if you want the 
+  sql services running as default. 
+  If you don't use credentials at all, 
+  you do not need the ConfigurationData parameter. 
+</p>
 
-# not required if you don't want service accounts
-# remove the params with this variable if you don't want this set
+```powershell
 $svcCred=Get-Credential 
 
 SccmSqlInstallation -OutputPath C:\temp\sqlInstall `
-  -computer sql `
+  -computerName $ENV:COMPUTERNAME `
   -ConfigurationData $config `
   -sqlInstanceName cm `
   -sqlSourceFiles 'D:\' `
@@ -332,5 +336,6 @@ Start-DscConfiguration -Path C:\temp\sqlInstall -Wait -Force -Verbose
   You can check the Sql Installation Summary file for insight into 
   any errors you get. 
   Generally located here: 
-  %ProgramFiles%\Microsoft SQL Server\<Version>\Setup Bootstrap\Log\Summary.txt
+  %ProgramFiles%\Microsoft SQL Server\nnn\Setup Bootstrap\Log\Summary.txt 
+  where nnn is the SQL version (ex: 130).
 </p>
