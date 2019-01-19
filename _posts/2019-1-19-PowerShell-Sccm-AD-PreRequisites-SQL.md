@@ -79,7 +79,6 @@ If you aren't on PSv5, download and install WMF 5.1
 and download and install the PowerShell package manager 
 [here](https://www.microsoft.com/en-us/download/details.aspx?id=51451)
 
-<br>
 
 #### Get the SqlServerDsc module
 
@@ -135,6 +134,8 @@ C:\Program Files\WindowsPowerShell\Modules\SqlServerDsc
  ...
 ```
 
+<br>
+
 #### Test SqlServerDsc module installation
 
 ```powershell
@@ -154,6 +155,26 @@ PowerShell      SqlDatabaseDefaultLoca... SqlServerDsc                   12.2.0.
 ```
 
 <br>
+
+### The Code
+----
+
+<p>
+  I have broken the code into different components. 
+  First is the 'configuration' which is just like a PowerShell function. 
+  Just like a function it has parameters that you can specify and 
+  you run it the same as you would a function.
+</p>
+<p>
+  Next is the Configuration Data. 
+  Using Configuration Data is not mandatory, 
+  but can be required under certain circumstances. 
+  In this example, if you want to use credentials 
+  (IE: configure SQL Services with service accounts) 
+  then you will need to use the Configuration Data.
+</p>
+
+#### Configuration
 
 ```powershell
 configuration SccmSqlInstallation {
@@ -218,12 +239,36 @@ configuration SccmSqlInstallation {
       SQLCollation = 'Latin1_General_CI_AS';
       DependsOn = '[WindowsFeature]NetFramework';
     }
+
+    # This part can be removed 
+    # If you aren't using credentials, OR
+    # If you have opted to store credentials in Plain Text
     LocalConfigurationManager {
       CertificateId = $node.Thumbprint
     }
+    # Remove to here
   }
 }
+```
 
+#### Configuration Data
+
+<p>
+  If you plan on using credentials in your configuration, 
+  you will need to use this. 
+  There is the right way to do this 
+  (using certificates to encrypt your credentials), 
+  and there is the wrong way to do this 
+  (storing your credentials in plain text). 
+  To do the insecure thing, you can uncomment out the 
+  PsDscAllowPlainTextPassword key below and remove the 
+  CertificateFile and Thumbprint entries. 
+</p>
+Doing it the right way takes more work of course. 
+There is a great document that explains how to set this up 
+[here](https://docs.microsoft.com/en-us/powershell/dsc/pull-server/securemof).
+
+```powershell
 $config = @{
   AllNodes = @(
     @{ 
@@ -235,20 +280,35 @@ $config = @{
     }
   )
 }
+```
 
+
+```powershell
+# Customize your parameters to match your environment
+
+$svcCred=Get-Credential
 
 SccmSqlInstallation -OutputPath C:\temp\sqlInstall `
   -computer sql `
   -ConfigurationData $config `
   -sqlInstanceName cm `
   -sqlSourceFiles 'D:\' `
-  -sqlSvcCredential $svc `
+  -sqlSvcCredential $svcCred `
   -sysAdminAccounts 'codeAndKeep\cmAdmin' `
-  -agentSvcCredential $svc `
+  -agentSvcCredential $svcCred `
   -features "SQLENGINE,RS"
 
+```
+<p>
+  Finally we can push the configuration to the computer 
+  and watch the magic happen. 
+</p>
 
+```powershell
+# This step is only required if you used credentials 
+# with certificate encryption
 Set-DscLocalConfigurationManager -Path C:\temp\sqlInstall
 
 Start-DscConfiguration -Path C:\temp\sqlInstall -Force -verbose -wait
 ```
+
