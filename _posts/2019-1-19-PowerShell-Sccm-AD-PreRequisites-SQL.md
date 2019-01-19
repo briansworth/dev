@@ -1,6 +1,6 @@
 ---
 layout: post
-title: PowerShell - Automate SQL Install - SCCM AD PreReqs
+title: PowerShell - Automate SQL Install - SCCM PreReqs
 ---
 
 This is a continuation of automating Sccm prerequisites [part 1](
@@ -48,7 +48,6 @@ http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites/
     <li>PowerShell v5</li>
       <ul>
         <li>Default on Win10 and Server 2016</li>
-        <li></li>
       </ul>
     <li>SqlServerDsc PowerShell Dsc Module</li>
       <ul>
@@ -57,6 +56,94 @@ http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites/
     <li>Sql Installation Media</li>
   </ol>
 </p>
+
+##### Check your PowerShell version:
+
+```powershell
+$PSVersionTable
+
+Name                           Value
+----                           -----
+PSVersion                      5.1.17134.407
+PSEdition                      Desktop
+PSCompatibleVersions           {1.0, 2.0, 3.0, 4.0...}
+BuildVersion                   10.0.17134.407
+
+# if you see PSVersion start with 5, you are on v5
+```
+
+If you aren't on PSv5, download and install WMF 5.1 
+[here](https://www.microsoft.com/en-us/download/details.aspx?id=54616) 
+and download and install the PowerShell package manager 
+[here](https://www.microsoft.com/en-us/download/details.aspx?id=51451)
+
+
+##### Get the SqlServerDsc module
+
+<p>
+  You should be able to run 'Find-Module -Name SqlServerDsc' and 
+  see something like below.
+</p>
+
+```powershell
+Find-Module -Name SqlServerDsc
+
+Version    Name                                Repository           Description
+-------    ----                                ----------           -----------
+12.2.0.0   SqlServerDsc                        PSGallery            Module with DSC Resources...
+```
+<p>
+  If the server you are installing Sql on has internet access, 
+  you can simply pipe that command to Install-Module.
+</p>
+
+```powershell
+Find-Module -Name SqlServerDsc | Install-Module 
+
+# Or just -> Install-Module -Name SqlServerDsc
+```
+
+<p>
+  If you need to download it from a separate computer do the following: 
+</p>
+
+```powershell
+# Choose where to save the module
+
+$path='C:\temp\SqlDsc'
+Save-Module -Name SqlServerDsc -Path $path
+```
+
+<p>
+  Now you can copy that folder location to your server and place it here: 
+  C:\Program Files\WindowsPowerShell\Modules\
+</p>
+
+```powershell
+# Should look something like this
+C:\Program Files\WindowsPowerShell\Modules\SqlServerDsc
+|--- 12.2.0.0
+  |-- DSCResources
+  ....
+```
+
+##### Test SqlServerDsc module installation
+
+```powershell
+Get-DscResource -Module SqlServerDsc
+
+ImplementedAs   Name                      ModuleName                     Version
+-------------   ----                      ----------                     -------
+PowerShell      SqlAG                     SqlServerDsc                   12.2.0.0
+PowerShell      SqlAGDatabase             SqlServerDsc                   12.2.0.0
+PowerShell      SqlAGListener             SqlServerDsc                   12.2.0.0
+PowerShell      SqlAGReplica              SqlServerDsc                   12.2.0.0
+PowerShell      SqlAlias                  SqlServerDsc                   12.2.0.0
+PowerShell      SqlAlwaysOnService        SqlServerDsc                   12.2.0.0
+PowerShell      SqlDatabase               SqlServerDsc                   12.2.0.0
+PowerShell      SqlDatabaseDefaultLoca... SqlServerDsc                   12.2.0.0
+...
+```
 
 ```powershell
 configuration SccmSqlInstallation {
