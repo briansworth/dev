@@ -9,13 +9,13 @@ http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites/),
 http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites-Install/) 
 and [part 3](
 http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites/
-)
+).
 
 <p>
   In this post I will be covering how you can automate the 
   installation of Microsoft Sql Server. 
   We will only install the Sccm required Sql components, 
-  Reporting Services and the Sql Engine.
+  Reporting Services and the Sql Database Engine.
 </p>
 
 <p>
@@ -27,8 +27,7 @@ http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites/
   and run the same setup.exe file pointing to that configuration file. 
 </p>
 <p>
-  The alternative to these options 
-  (which will ultimately use the above approaches under the hood), 
+  The alternative to these options, 
   is to use Desired State Configuration (DSC). 
   If you are not familiar with this product I would highly recommend 
   looking into it. 
@@ -173,6 +172,12 @@ PowerShell      SqlDatabaseDefaultLoca... SqlServerDsc                   12.2.0.
   (IE: configure SQL Services with service accounts) 
   then you will need to use the Configuration Data.
 </p>
+<p>
+  Lastly, the MOF file generation and the 'PUSH'; 
+  sending the MOF to the 'Local Configuration Manager' 
+  so it can do your bidding.
+</p>
+
 
 #### Configuration
 
