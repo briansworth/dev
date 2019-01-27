@@ -103,5 +103,5 @@ Get-Content -Path C:\ConfigMgrSetup.log -Wait
 
 <p>
   If you run in to errors for the install, be sure to check the setup logs. 
-  Check ConfigMgrPrereqSetup.log and ConfigMgrSetup.log for details on errors.
+  Check ConfigMgrPrereq.log and ConfigMgrSetup.log for details on errors.
 </p>
