@@ -3,6 +3,10 @@ layout: post
 title: PowerShell - Automate Sccm Primary Site Install
 ---
 
+<p>
+The last step in the journey to automating a Sccm Primary Site server install.
+</p>
+
 This is a continuation of automating Sccm prerequisites:
 - [Part 1](http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites/)
 - [Part 2]( http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites-Install/)
