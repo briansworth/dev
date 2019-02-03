@@ -7,11 +7,11 @@ After creating 5 posts about automating Sccm primary site installs,
 I think an example bringing everything together is useful. 
 
 Sccm Automation Posts:
-- [Post 1](http://codeandkeep.com/PowerShell-ActiveDirectory-Exchange-Part1/) | Download Prereqs
-- [Post 2](http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites-Install/) | Install Prereqs
-- [Post 3](http://codeandkeep.com/PowerShell-Sccm-PreRequisites/) | AD Prereqs
-- [Post 4](http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites-SQL/) | Sql Install
-- [Post 5](http://codeandkeep.com/PowerShell-Sccm-Primary-Site-Install/) | Sccm Primary Site Install
+- [Post 1](http://codeandkeep.com/PowerShell-ActiveDirectory-Exchange-Part1/)  | Download Prereqs
+- [Post 2](http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites-Install/)  | Install Prereqs
+- [Post 3](http://codeandkeep.com/PowerShell-Sccm-PreRequisites/)  | AD Prereqs
+- [Post 4](http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites-SQL/)  | Sql Install
+- [Post 5](http://codeandkeep.com/PowerShell-Sccm-Primary-Site-Install/)  | Sccm Primary Site Install
 
 ### The Environment
 ----
@@ -19,9 +19,9 @@ Sccm Automation Posts:
 <p>
   This is a lab environment with the following servers:
     <ul>
-      <li>dc1 | DomainController</li>
+      <li>dc1  | DomainController</li>
       <li>cm1 | Will be the Sccm Primary Site Server </li>
-      <li>sql | Will be the Sccm Sql server</li>
+      <li>sql  | Will be the Sccm Sql server</li>
     </ul>
     All servers are Windows Server 2016. 
     NOTE: You can install Sql on the cm1 server to save building another VM.
@@ -108,7 +108,8 @@ Now on the VM:
 Expand-Archive -Path C:\temp\Sccm\SccmPreReq.zip -Destination C:\temp\Sccm
 ```
 
-End of Hyper-V file copy
+##### End of Hyper-V file copy
+
 -----
 
 ### Sccm PreReq Install
@@ -147,3 +148,112 @@ I have mounted the Sccm Installation ISO to the D:\ drive of the cm1 server.
 # Extend the Active Directory schema
 D:\SMSSETUP\BIN\X64\ExtADSch.exe
 ```
+
+### Sql Install
+----
+
+<p>
+  The Sql Server installation ISO image has been mounted to the D:\ drive. 
+  I have created a service account in AD, 
+  that I will use for the Sql Agent and Sql Server services. 
+  Those services are not permitted to run as a local account in an 
+  Sccm installation.
+</p>
+
+<p>
+  Since I have opted to use Desired State Configuration (DSC) 
+  to automate the Sql install, 
+  you will need to download the SqlServerDsc resource from 
+  the PowerShell Gallery. 
+  I have also setup a certificate on the Sql server that the 
+  Dsc local configuration manager will use to encrypt my passwords. 
+</p>
+
+<p>
+  If your Sql server has internet access:
+</p>
+
+```powershell
+Install-Module -Name SqlServerDsc
+```
+
+<p>
+  If your Sql server does not have internet access, 
+  run the following command on a computer with internet access: 
+</p>
+
+```powershell
+Save-Module -Name SqlSeverDsc -Path C:\temp\
+
+# Copy the folder to the Sql server to the PS Modules folder
+Copy-Item -Path C:\temp\SqlServerDsc `
+  -Recurse `
+  -Destination "\\Sql\c$\Program Files\WindowsPowerShell\Modules"
+```
+
+#### DSC Configuration
+----
+
+Copy the 'Configuration' from 
+[Part 4](http://codeandkeep.com/PowerShell-Sccm-PreRequisites-SQL/) 
+Directly into an Admin PowerShell window on your Sql server.
+
+<p>
+Create your DSC configuration data:
+</p>
+
+```powershell
+$config = @{
+  AllNodes = @(
+    @{ 
+      NodeName = $ENV:COMPUTERNAME 
+      # Path to your certificate to use for encryption
+      CertificateFile = 'C:\cert\cert.cer';
+      
+      # This will need to match your Certificate
+      Thumbprint = '4B1EF9E6C194098257E93120A4A39DA853F23434'
+    }
+  )
+}
+```
+<p>
+  Now to generate your Sql Mof file:
+</p>
+
+```powershell
+# Service account created for running Sql server services
+$svcCred=Get-Credential
+
+$sccmAdmin='codeAndKeep\cmAdmin'
+
+SccmSqlInstallation -OutputPath C:\temp\sqlInstall `
+  -computerName $ENV:COMPUTERNAME `
+  -ConfigurationData $config `
+  -sqlSourceFiles 'D:\' `
+  -sqlSvcCredential $svcCred `
+  -sysAdminAccounts $sccmAdmin `
+  -agentSvcCredential $svcCred `
+  -features "SQLENGINE,RS"
+```
+
+<p>
+  Now start the configuration:
+</p>
+
+```powershell
+Set-DscLocalConfigurationManager -Path C:\temp\sqlInstall
+
+Start-DscConfiguration -Path C:\temp\sqlInstall -Wait -Force -Verbose
+```
+
+<p>
+  Lastly, if you are installing Sql on a separate server, 
+  you will need to add the Sccm server as an admin on the Sql server.
+</p>
+
+```powershell
+Add-LocalGroupMember -Name Administrators -Member 'codeAndKeep\cm1$'
+```
+
+### The Sccm Install
+
