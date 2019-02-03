@@ -282,4 +282,55 @@ Add-LocalGroupMember -Name Administrators -Member 'codeAndKeep\cm1$'
 ```
 
 ### The Sccm Install
+----
 
+<p>
+  I have mounted the SCCM installation ISO to the cm1 server on the D:\ drive. 
+  I have also modified my Sccm install configuration file 
+  to what you see below.
+</p>
+
+For more information on this part, check out 
+[Post 5 ](http://codeandkeep.com/PowerShell-Sccm-Primary-Site-Install/).
+
+```
+[Identification]
+Action=InstallPrimarySite
+
+[Options]
+ProductID=EVAL
+SiteCode=CDE
+SiteName=Code And Keep Managing Computers
+SMSInstallDir=E:\Program Files\Microsoft Configuration Manager
+SDKServer=cm1.codeAndKeep.com
+RoleCommunicationProtocol=HTTPorHTTPS
+ClientsUsePKICertificate=1
+PrerequisiteComp=1
+PrerequisitePath=C:\temp\sccm\prereq
+MobileDeviceLanguage=0
+ManagementPoint=cm1.codeAndKeep.com
+ManagementPointProtocol=HTTP
+DistributionPoint=cm1.codeAndKeep.com
+DistributionPointProtocol=HTTP
+DistributionPointInstallIIS=0
+AdminConsole=1
+JoinCEIP=0
+
+[SQLConfigOptions]
+SQLServerName=sql.codeAndKeep.com
+DatabaseName=CM_CDE
+SQLSSBPort=4022
+SQLDataFilePath=E:\Program Files\ Microsoft SQL Server\
+SQLLogFilePath=E:\Program Files\Microsoft SQL Server\
+
+[CloudConnectorOptions]
+CloudConnector=0
+CloudConnectorServer=cm1.codeAndKeep.com
+UseProxy=0
+ProxyName=
+ProxyPort=
+
+[SystemCenterOptions]
+
+[HierarchyExpansionOption]
+```
