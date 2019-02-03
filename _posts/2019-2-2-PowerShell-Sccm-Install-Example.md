@@ -244,8 +244,8 @@ $svcCred=Get-Credential
 
 $sccmAdmin='codeAndKeep\cmAdmin'
 
-$installDir='S:\Program Files\Microsoft SQL Server'
-$installx86Dir='S:\Program Files (x86)\Microsoft SQL Server'
+$installDir='E:\Program Files\Microsoft SQL Server'
+$installx86Dir='E:\Program Files (x86)\Microsoft SQL Server'
 
 
 SccmSqlInstallation -OutputPath C:\temp\sqlInstall `
