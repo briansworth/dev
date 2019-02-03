@@ -334,3 +334,20 @@ ProxyPort=
 
 [HierarchyExpansionOption]
 ```
+
+<p>
+  I have saved this file as SccmSetupConfig.ini under C:\temp. 
+  If you haven't rebooted the cm1 server since installing the ADK/prereqs, 
+  I would recommend doing so before installing.
+</p>
+
+
+#### Install
+----
+
+```powershell
+D:\SMSSETUP\BIN\X64\setup.exe /SCRIPT C:\temp\SccmSetupConfig.ini
+
+# check the setup log for errors
+Get-Content -Path C:\ConfigMgrSetup.log -Wait
+```
