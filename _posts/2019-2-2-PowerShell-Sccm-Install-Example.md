@@ -259,7 +259,7 @@ SccmSqlInstallation -OutputPath C:\temp\sqlInstall `
   -instanceDir=$installDir `
   -dataDir=$installDir `
   -sharedDir=$installDir `
-  -sharedWOWDir=$installx86Dir `
+  -sharedWOWDir=$installx86Dir
 ```
 
 <p>
