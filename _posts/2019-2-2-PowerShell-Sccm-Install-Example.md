@@ -320,7 +320,7 @@ JoinCEIP=0
 SQLServerName=sql.codeAndKeep.com
 DatabaseName=CM_CDE
 SQLSSBPort=4022
-SQLDataFilePath=E:\Program Files\ Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA
+SQLDataFilePath=E:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA
 SQLLogFilePath=E:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA
 
 [CloudConnectorOptions]
