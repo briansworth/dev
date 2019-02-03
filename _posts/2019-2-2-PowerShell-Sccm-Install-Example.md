@@ -252,7 +252,7 @@ SccmSqlInstallation -OutputPath C:\temp\sqlInstall `
   -ConfigurationData $config `
   -computerName $ENV:COMPUTERNAME `
   -sqlSourceFiles 'D:\' `
-  -features "SQLENGINE,RS"
+  -features "SQLENGINE,RS" `
   -sqlSvcCredential $svcCred `
   -agentSvcCredential $svcCred `
   -sysAdminAccounts $sccmAdmin `
