@@ -256,10 +256,10 @@ SccmSqlInstallation -OutputPath C:\temp\sqlInstall `
   -sqlSvcCredential $svcCred `
   -agentSvcCredential $svcCred `
   -sysAdminAccounts $sccmAdmin `
-  -instanceDir=$installDir `
-  -dataDir=$installDir `
-  -sharedDir=$installDir `
-  -sharedWOWDir=$installx86Dir
+  -instanceDir $installDir `
+  -dataDir $installDir `
+  -sharedDir $installDir `
+  -sharedWOWDir $installx86Dir
 ```
 
 <p>
