@@ -137,7 +137,7 @@ and saved the script from
 to the cm1 server as SccmPreReqInstall.ps1.
 
 ```powershell
-SccmPreReqInstall.ps1 -prereqSourcePath C:\temp\Sccm -windowsMediaSourcePath D:\sources\sxs -Verbose
+.\SccmPreReqInstall.ps1 -prereqSourcePath C:\temp\Sccm -windowsMediaSourcePath D:\sources\sxs -Verbose
 ```
 
 <p>
