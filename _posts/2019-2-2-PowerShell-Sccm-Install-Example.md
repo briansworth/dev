@@ -7,11 +7,11 @@ After creating 5 posts about automating Sccm primary site installs,
 I think an example bringing everything together is useful. 
 
 Sccm Automation Posts:
-- [Post 1](http://codeandkeep.com/PowerShell-ActiveDirectory-Exchange-Part1/)  | Download Prereqs
-- [Post 2](http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites-Install/)  | Install Prereqs
-- [Post 3](http://codeandkeep.com/PowerShell-Sccm-PreRequisites/)  | AD Prereqs
-- [Post 4](http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites-SQL/)  | Sql Install
-- [Post 5](http://codeandkeep.com/PowerShell-Sccm-Primary-Site-Install/)  | Sccm Primary Site Install
+- [Post 1 ](http://codeandkeep.com/PowerShell-ActiveDirectory-Exchange-Part1/) | Download Prereqs
+- [Post 2 ](http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites-Install/) | Install Prereqs
+- [Post 3 ](http://codeandkeep.com/PowerShell-Sccm-PreRequisites/) | AD Prereqs
+- [Post 4 ](http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites-SQL/) | Sql Install
+- [Post 5 ](http://codeandkeep.com/PowerShell-Sccm-Primary-Site-Install/) | Sccm Primary Site Install
 
 ### The Environment
 ----
@@ -19,12 +19,23 @@ Sccm Automation Posts:
 <p>
   This is a lab environment with the following servers:
     <ul>
-      <li>dc1  | DomainController</li>
-      <li>cm1 | Will be the Sccm Primary Site Server </li>
-      <li>sql  | Will be the Sccm Sql server</li>
+      <li>dc1</li>
+        <ul>
+          <li>DomainController</li>
+        </ul>
+      <li>cm1</li>
+        <ul>
+          <li>Will be the Sccm Primary Site Server</li>
+        </ul>
+      <li>sql</li>
+        <ul>
+          <li>Will be the Sccm Sql server</li>
+        </ul>
     </ul>
     All servers are Windows Server 2016. 
-    NOTE: You can install Sql on the cm1 server to save building another VM.
+</p>
+<p>
+  NOTE: You can install Sql on the cm1 server to save building another VM.
 </p>
 
 ### Download
@@ -198,9 +209,11 @@ Copy the 'Configuration' from
 [Part 4](http://codeandkeep.com/PowerShell-Sccm-PreRequisites-SQL/) 
 Directly into an Admin PowerShell window on your Sql server.
 
-<p>
-Create your DSC configuration data:
-</p>
+Create your DSC configuration data.
+Reference the  
+[Sql post](http://codeandkeep.com/PowerShell-Sccm-PreRequisites-SQL/) 
+ for more information on this if required:
+
 
 ```powershell
 $config = @{
@@ -226,14 +239,22 @@ $svcCred=Get-Credential
 
 $sccmAdmin='codeAndKeep\cmAdmin'
 
+$installDir='S:\Program Files\Microsoft SQL Server'
+$installx86Dir='S:\Program Files (x86)\Microsoft SQL Server'
+
+
 SccmSqlInstallation -OutputPath C:\temp\sqlInstall `
-  -computerName $ENV:COMPUTERNAME `
   -ConfigurationData $config `
+  -computerName $ENV:COMPUTERNAME `
   -sqlSourceFiles 'D:\' `
-  -sqlSvcCredential $svcCred `
-  -sysAdminAccounts $sccmAdmin `
-  -agentSvcCredential $svcCred `
   -features "SQLENGINE,RS"
+  -sqlSvcCredential $svcCred `
+  -agentSvcCredential $svcCred `
+  -sysAdminAccounts $sccmAdmin `
+  -instanceDir=$installDir `
+  -dataDir=$installDir `
+  -sharedDir=$installDir `
+  -sharedWOWDir=$installx86Dir `
 ```
 
 <p>
