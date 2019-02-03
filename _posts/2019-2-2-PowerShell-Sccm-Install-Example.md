@@ -7,11 +7,16 @@ After creating 5 posts about automating Sccm primary site installs,
 I think an example bringing everything together is useful. 
 
 Sccm Automation Posts:
-- [Post 1 ](http://codeandkeep.com/PowerShell-ActiveDirectory-Exchange-Part1/) | Download Prereqs
-- [Post 2 ](http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites-Install/) | Install Prereqs
-- [Post 3 ](http://codeandkeep.com/PowerShell-Sccm-PreRequisites/) | AD Prereqs
-- [Post 4 ](http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites-SQL/) | Sql Install
-- [Post 5 ](http://codeandkeep.com/PowerShell-Sccm-Primary-Site-Install/) | Sccm Primary Site Install
+- [Post 1 ](http://codeandkeep.com/PowerShell-ActiveDirectory-Exchange-Part1/) 
+  - Download Prereqs
+- [Post 2 ](http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites-Install/) 
+  - Install Prereqs
+- [Post 3 ](http://codeandkeep.com/PowerShell-Sccm-PreRequisites/) 
+  - AD Prereqs
+- [Post 4 ](http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites-SQL/) 
+  - Sql Install
+- [Post 5 ](http://codeandkeep.com/PowerShell-Sccm-Primary-Site-Install/) 
+  - Sccm Primary Site Install
 
 ### The Environment
 ----
