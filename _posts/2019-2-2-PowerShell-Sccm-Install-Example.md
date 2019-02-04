@@ -90,7 +90,8 @@ I think an example bringing everything together is useful.
   </tr>
 </table>
 
-    All servers are Windows Server 2016. 
+<p>
+  All servers are Windows Server 2016. 
 </p>
 <p>
   You can install Sql on the cm1 server to save building another VM.
