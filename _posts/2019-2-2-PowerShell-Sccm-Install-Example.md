@@ -386,6 +386,10 @@ ProxyPort=
 ```
 
 <p>
+  The SQLDataFilePath and SQLLogFilePath will be in a different location 
+  depending on your Sql version and/or instance name.
+</p>
+<p>
   I have saved this file as SccmSetupConfig.ini under C:\temp. 
   If you haven't rebooted the cm1 server since installing the ADK/prereqs, 
   I would recommend doing so before installing.
