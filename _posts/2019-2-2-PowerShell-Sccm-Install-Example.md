@@ -3,6 +3,9 @@ layout: post
 title: PowerShell - Sccm Install Example
 ---
 
+After creating 5 posts about automating Sccm primary site installs, 
+I think an example bringing everything together is useful. 
+
 <style>
 table {
   border-collapse: collapse;
@@ -18,9 +21,6 @@ tr:nth-child(even) {
   background-color: #ececec;
 }
 </style>
-
-After creating 5 posts about automating Sccm primary site installs, 
-I think an example bringing everything together is useful. 
 
 #### Sccm Automation Posts:
 
@@ -405,3 +405,8 @@ D:\SMSSETUP\BIN\X64\setup.exe /SCRIPT C:\temp\SccmSetupConfig.ini
 # check the setup log for errors
 Get-Content -Path C:\ConfigMgrSetup.log -Wait
 ```
+
+<p>
+  After all this you should have a fully functional Sccm 
+  Primary Site server installed in your lab environment.
+</p>
