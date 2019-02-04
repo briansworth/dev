@@ -3,10 +3,27 @@ layout: post
 title: PowerShell - Sccm Install Example
 ---
 
+<style>
+table {
+  border-collapse: collapse;
+  width: 50%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #ececec;
+}
+</style>
+
 After creating 5 posts about automating Sccm primary site installs, 
 I think an example bringing everything together is useful. 
 
-Sccm Automation Posts:
+#### Sccm Automation Posts:
 
 <table>
   <tr>
@@ -16,7 +33,7 @@ Sccm Automation Posts:
     <td>Download Prereqs</td>
   </tr>
 
-  <tr>
+  <tr padding>
     <td>
       <a href="http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites-Install/">Post 2</a>
     </td>
