@@ -48,7 +48,7 @@ I think an example bringing everything together is useful.
 
   <tr>
     <td>
-      <a href="http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites-SQL/">Post 4</a>
+      <a href="http://codeandkeep.com/PowerShell-Sccm-PreRequisites-SQL/">Post 4</a>
     </td>
     <td>Sql Install</td>
   </tr>
