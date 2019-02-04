@@ -10,9 +10,8 @@ table {
 }
 
 td, th {
-  border: 1px solid #dddddd;
   text-align: left;
-  padding: 8px;
+  padding: 4px;
 }
 
 tr:nth-child(even) {
@@ -67,24 +66,34 @@ I think an example bringing everything together is useful.
 
 <p>
   This is a lab environment with the following servers:
-    <ul>
-      <li>dc1</li>
-        <ul>
-          <li>DomainController</li>
-        </ul>
-      <li>cm1</li>
-        <ul>
-          <li>Will be the Sccm Primary Site Server</li>
-        </ul>
-      <li>sql</li>
-        <ul>
-          <li>Will be the Sccm Sql server</li>
-        </ul>
-    </ul>
+</p>
+
+<table>
+  <tr>
+    <th><strong>Name</strong></th>
+    <th><strong>Role</strong></th>
+  </tr>
+
+  <tr>
+    <td>dc1</td>
+    <td>Domain Controller</td>
+  </tr>
+
+  <tr>
+    <td>cm1</td>
+    <td>Will be the Sccm Primary Site Server</td>
+  </tr>
+
+  <tr>
+    <td>Sql</td>
+    <td>Will be the Sql server for the Sccm DB</td>
+  </tr>
+</table>
+
     All servers are Windows Server 2016. 
 </p>
 <p>
-  NOTE: You can install Sql on the cm1 server to save building another VM.
+  You can install Sql on the cm1 server to save building another VM.
 </p>
 
 ### Download
