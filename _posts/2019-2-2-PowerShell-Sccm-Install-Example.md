@@ -7,16 +7,43 @@ After creating 5 posts about automating Sccm primary site installs,
 I think an example bringing everything together is useful. 
 
 Sccm Automation Posts:
-- [Post 1 ](http://codeandkeep.com/PowerShell-ActiveDirectory-Exchange-Part1/) 
-  - Download Prereqs
-- [Post 2 ](http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites-Install/) 
-  - Install Prereqs
-- [Post 3 ](http://codeandkeep.com/PowerShell-Sccm-PreRequisites/) 
-  - AD Prereqs
-- [Post 4 ](http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites-SQL/) 
-  - Sql Install
-- [Post 5 ](http://codeandkeep.com/PowerShell-Sccm-Primary-Site-Install/) 
-  - Sccm Primary Site Install
+
+<table>
+  <tr>
+    <td>
+      <a href="http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites/">Post 1</a>
+    </td>
+    <td>Download Prereqs</td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://codeandkeep.com/PowerShell-SCCM-Offline-PreRequisites-Install/">Post 2</a>
+    </td>
+    <td>Install Prereqs</td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites/">Post 3</a>
+    </td>
+    <td>AD Prereqs</td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites-SQL/">Post 4</a>
+    </td>
+    <td>Sql Install</td>
+  </tr>
+
+  <tr>
+    <td>
+      <a href="http://codeandkeep.com/PowerShell-Sccm-Primary-Site-Install/">Post 5</a>
+    </td>
+    <td>Sccm Primary Site Install</td>
+  </tr>
+</table>
 
 ### The Environment
 ----
@@ -124,9 +151,6 @@ Now on the VM:
 Expand-Archive -Path C:\temp\Sccm\SccmPreReq.zip -Destination C:\temp\Sccm
 ```
 
-##### End of Hyper-V file copy
-
------
 
 ### Sccm PreReq Install
 ----
@@ -215,8 +239,7 @@ Copy the 'Configuration' from
 Directly into an Admin PowerShell window on your Sql server.
 
 Create your DSC configuration data.
-Reference the  
-[Sql post](http://codeandkeep.com/PowerShell-Sccm-PreRequisites-SQL/) 
+Reference the [Sql post](http://codeandkeep.com/PowerShell-Sccm-PreRequisites-SQL/) 
  for more information on this if required:
 
 
