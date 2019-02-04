@@ -141,7 +141,7 @@ d-----         2/2/2019   5:08 PM                adkPeAddon
 d-----         2/2/2019   4:57 PM                prereq
 ```
 
-##### Copy files to Hyper-V VM from Host
+#### Copy files to Hyper-V VM from Host
 
 <p>
   You only need to follow this section if you are downloading on your host, 
@@ -201,7 +201,7 @@ to the cm1 server as SccmPreReqInstall.ps1.
 ----
 
 I have saved the script from 
-[Post 3](http://codeandkeep.com/PowerShell-Sccm-PreRequisites/) 
+[Post 3](http://codeandkeep.com/PowerShell-Sccm-AD-PreRequisites/) 
 on the cm1 server as SccmADPreReq.ps1. 
 I have mounted the Sccm Installation ISO to the D:\ drive of the cm1 server.
 <p>
