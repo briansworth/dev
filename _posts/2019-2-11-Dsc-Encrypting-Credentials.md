@@ -230,12 +230,19 @@ configuration LocalUserSetup {
   Import-DscResource -ModuleName PSDesiredStateConfiguration
 
   Node $ENV:COMPUTERNAME {
-    User 'GetLocalUser' {
+    User 'NewLocalUser' {
       UserName = $UserName;
       Password = $Password;
       FullName = $FullName;
       Disabled = $Disabled;
       Ensure = 'Present';
+    }
+
+    Group 'AddToAdmin' {
+      GroupName = 'Administrators';
+      Members = $UserName;
+      Ensure = 'Present';
+      DependsOn = '[User]NewLocalUser';
     }
   }
 }
