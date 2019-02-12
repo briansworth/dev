@@ -258,11 +258,73 @@ $configData=@{
 }
 
 $cred=Get-Credential
-LocalUserSetup -OutputPath 'C:\dsc' `
+$mof=LocalUserSetup -OutputPath 'C:\dsc' `
   -UserName 'MrT' `
   -FullName 'Mr. T' `
   -Password $cred `
   -ConfigurationData $configData
 
+```
+
+<p>
+  Before running the configuration, 
+  we should verify that the credentials are indeed encrypted.
+</p>
+
+```powershell
+Get-Content -Path $mof.FullName | more
+```
+
+<p>
+  Near the top of the Mof file, 
+  you should see something like 
+  'instance of MSF_Credential' and in the block below it,
+  a huge string of random characters after 'Password'. 
+  Something like this:
+</p>
+
+```
+instance of MSFT_Credential as $MSFT_Credential1ref
+{
+  Password = "-----BEGIN CMS-----\nmOAC++...iXr+79KFM\n-----END CMS-----";
+  UserName = "MrT";
+
+};
+```
+
+<p>
+  I removed most of the encrypted string but it should be quite long. 
+  As you can see, your password has been encrypted. 
+  Next step is to make sure that it works.
+</p>
+
+#### Run the configuration
+
+```powershell
 Start-DscConfiguration -Path C:\dsc -Force -Wait -Verbose
 ```
+
+<p>
+  You should now see a newly created local user 'MrT', 
+  and that user should be a member of the Administrators local group.
+</p>
+
+```powershell
+Get-LocalUser
+# or run: net user
+
+Get-LocalGroupMember -Group Administrators
+# or run: net localgroup Administrators
+```
+
+#### Bonus points
+----
+
+<p>
+  For fun, try either removing your newly created user completely, 
+  or just remove the user from the Administrators group. 
+  If you wait 15 minutes or so 
+  (or run Update-DscConfiguration -Wait -Verbose) 
+  your user should come right back. Pretty cool.
+</p>
+
