@@ -240,7 +240,7 @@ configuration LocalUserSetup {
 
     Group 'AddToAdmin' {
       GroupName = 'Administrators';
-      Members = $UserName;
+      MembersToInclude = $UserName;
       Ensure = 'Present';
       DependsOn = '[User]NewLocalUser';
     }
