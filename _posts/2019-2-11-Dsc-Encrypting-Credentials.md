@@ -225,7 +225,7 @@ configuration LocalUserSetup {
     [bool]$Disabled=$false,
 
     [Parameter(Position=3)]
-    [String]$FullName=$UserName,
+    [String]$FullName=$UserName
   )
   Import-DscResource -ModuleName PSDesiredStateConfiguration
 
@@ -251,9 +251,10 @@ $configData=@{
 }
 
 $cred=Get-Credential
-UserInGroup -OutputPath 'C:\dsc' `
-  -Credential $cred `
-  -UserName 'codeAndKeep\brian' `
+LocalUserSetup -OutputPath 'C:\dsc' `
+  -UserName 'MrT' `
+  -FullName 'Mr. T' `
+  -Password $cred `
   -ConfigurationData $configData
 
 Start-DscConfiguration -Path C:\dsc -Force -Wait -Verbose
