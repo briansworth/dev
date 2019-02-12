@@ -247,7 +247,10 @@ $configData=@{
 }
 
 $cred=Get-Credential
-UserInGroup -UserName 'codeAndKeep\brian' -Credential $cred -OutputPath 'C:\dsc'
+UserInGroup -OutputPath 'C:\dsc' `
+  -Credential $cred `
+  -UserName 'codeAndKeep\brian' `
+  -ConfigurationData $configData
 
 Start-DscConfiguration -Path C:\dsc -Force -Wait -Verbose
 ```
