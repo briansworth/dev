@@ -177,7 +177,7 @@ if($certReq.Status -eq 'Issued'){
 $certPath='C:\dsc\cert\DscPubKey.cer'
 
 $certFile=[Security.Cryptography.X509Certificates.X509Certificate]::CreateFromCertFile($certPath)
-$certThumb=$certFile.GetHashString()
+$certThumb=$certFile.GetCertHashString()
 
 $cert=Get-Item -Path "Cert:\LocalMachine\My\$certThumb"
 if($cert -and $cert.PrivateKey){
