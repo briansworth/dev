@@ -213,24 +213,28 @@ Set-DscLocalConfigurationManager -Path 'C:\dsc\lcm' -Force -Verbose
 #### Push test credential configuration
 
 ```powershell
-configuration UserInGroup {
+configuration LocalUserSetup {
   Param(
-    [Parameter(Position=0)]
-    [String]$GroupName='Administrators',
-
-    [Parameter(Position=1,Mandatory=$true)]
+    [Parameter(Position=0,Mandatory=$true)]
     [String]$UserName, 
 
-    [Parameter(Position=2,Mandatory=$true)]
-    [PSCredential]$Credential
+    [Parameter(Position=1,Mandatory=$true)]
+    [PSCredential]$Password,
+
+    [Parameter(Position=2)]
+    [bool]$Disabled=$false,
+
+    [Parameter(Position=3)]
+    [String]$FullName=$UserName,
   )
   Import-DscResource -ModuleName PSDesiredStateConfiguration
 
   Node $ENV:COMPUTERNAME {
-    Group 'InGroup' {
-      GroupName = $GroupName;
-      Members = $UserName;
-      Credential = $Credential;
+    User 'GetLocalUser' {
+      UserName = $UserName;
+      Password = $Password;
+      FullName = $FullName;
+      Disabled = $Disabled;
       Ensure = 'Present';
     }
   }
