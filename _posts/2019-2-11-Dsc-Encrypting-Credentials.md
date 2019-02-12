@@ -172,7 +172,7 @@ if($certReq.Status -eq 'Issued'){
 
 #### Verify certificate
 
-```
+```powershell
 # If you followed the same path used above
 $certPath='C:\dsc\cert\DscPubKey.cer'
 
@@ -227,9 +227,9 @@ configuration UserInGroup {
   Import-DscResource -ModuleName PSDesiredStateConfiguration
 
   Node $ENV:COMPUTERNAME {
-    Group 'BrianIsAdmin' {
+    Group 'InGroup' {
       GroupName = $GroupName;
-      UserName = $UserName;
+      Members = $UserName;
       Credential = $Credential;
       Ensure = 'Present';
     }
