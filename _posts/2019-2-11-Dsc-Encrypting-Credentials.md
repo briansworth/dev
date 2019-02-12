@@ -6,16 +6,16 @@ title: Dsc - Encrypting Credentials
 <p>
   Using credentials in a DSC configuration is almost unavoidable. 
   Storing your credentials in plain text is absolutely avoidable, 
-  and should be a requirement for you, in even a lab environment.
+  and should be a requirement for you; even a lab environment.
 </p>
 
 <p>
-  To accomplish credential encryption in a DSC capactity, 
+  To accomplish credential encryption in DSC, 
   you will need to use certificates. 
   I will go over 2 different ways to do so.
 </p>
 1. Self Signed Certificate
-2. Using PKI (Active Directory Certificate Services)
+2. Using PKI with Active Directory Certificate Services (ADCS)
 
 
 ### Self Signed Certificate
@@ -31,7 +31,7 @@ title: Dsc - Encrypting Credentials
 </p>
 
 <p>
-  Since you will be puttin certificates into the local computer 
+  Since you will be putting certificates into the local computer 
   certificate store, you will need to be running as admin.
 </p>
 
@@ -72,10 +72,11 @@ Import-PfxCertificate -FilePath $privateKeyPath `
 ```
 
 <p>
-  Now have a certificate 'DscEncryption' in your Computer Personal store. 
-  You should also have a X.509 certificate file C:\dsc\cert\DscPubKey.cer. 
+  Now you have a certificate 'DscEncryption' in your Computer Personal store. 
+  You should also have a X.509 certificate file -> C:\dsc\cert\DscPubKey.cer. 
   You can now utilize this certificate for 
-  Dsc configurations on your local machine.
+  Dsc configurations on your local machine. 
+  Example to follow.
 </p>
 
 ### ADCS Certificate Template
@@ -89,7 +90,6 @@ Import-PfxCertificate -FilePath $privateKeyPath `
 </p>
 
 #### Prerequisites
-----
 
 <p>
   To utilize a Dsc Certificate Template, 
@@ -119,12 +119,12 @@ New-ADCSTemplateForPSEncryption -DisplayName 'Dsc Template' `
 ```
 
 <p>
-  You should now have your certificate template setup. 
+  Your certificate template should now be setup. 
   You can check for it by running Get-CATemplate. 
 </p>
 
 <p>
-  Now you will be able to request a certificate from your domain 
+  Now you can request a certificate from your domains 
   Certificate Authority server using the newly created Template:
 </p>
 
@@ -155,8 +155,8 @@ if($certReq.Status -eq 'Issued'){
   If you followed the Self Signed Certificate walkthrough, 
   you should be at a similar end point.
   You should have a certificate in your Computer Personal store 
-  (under the name of your computer). 
-  You should also have a X.509 certificate file C:\dsc\cert\DscPubKey.cer. 
+  (named as the dns name of your computer). 
+  You should also have a X.509 certificate file -> C:\dsc\cert\DscPubKey.cer. 
   You can now utilize this certificate for 
   Dsc configurations on your local machine.
 </p>
@@ -229,7 +229,7 @@ configuration LocalUserSetup {
   )
   Import-DscResource -ModuleName PSDesiredStateConfiguration
 
-  Node $ENV:COMPUTERNAME {
+  Node localhost {
     User 'NewLocalUser' {
       UserName = $UserName;
       Password = $Password;
@@ -263,7 +263,6 @@ $mof=LocalUserSetup -OutputPath 'C:\dsc' `
   -FullName 'Mr. T' `
   -Password $cred `
   -ConfigurationData $configData
-
 ```
 
 <p>
