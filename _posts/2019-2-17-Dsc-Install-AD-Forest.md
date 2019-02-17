@@ -201,6 +201,7 @@ $config=@{
 
 $domainCred=Get-Credential
 
+# Generate configuration MOF files
 DomainInit -ConfigurationData $config `
   -OutputPath C:\dsc\AD `
   -DomainCredential $domainCred `
