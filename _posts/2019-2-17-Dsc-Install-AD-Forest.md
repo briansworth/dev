@@ -6,15 +6,16 @@ title: Dsc - Install Active Directory Forest
 <p>
   Building and rebuilding labs is something I do frequently. 
   Active Directory is one the biggest requirements for a Windows lab. 
-  Installing an AD Forest is pretty straightforward, 
-  but DSC can make it that much more simple.
+  This means constantly installing AD Forests with the same configurations. 
+  Automating this with PowerShell is pretty straightforward, 
+  but Dsc can make it even more so.
 </p>
 
 #### Prerequisites
 ----
 
 <p>
-  You will need the following DSC resources to follow along:
+  You will need the following Dsc resources to follow along:
   <ul>
     <li>xActiveDirectory</li>
     <li>NetworkingDsc</li>
@@ -38,12 +39,12 @@ title: Dsc - Install Active Directory Forest
 </p>
 
 Installing a new AD Forest does require specifying credentials. 
-You should always ensure your credentials are encrypted for DSC configurations. 
+You should always ensure your credentials are encrypted for Dsc configurations. 
 See my previous [post](http://codeandkeep.com/Dsc-Encrypting-Credentials/) 
 for instructions on how to do so. 
 I will be using a self-signed certificate for encryption in this example.
 
-### DSC Configuration
+### Dsc Configuration
 ----
 
 ```powershell
@@ -169,6 +170,14 @@ configuration DomainInit {
 }
 ```
 
+#### Environment Variables / Customization
+----
+
+<p>
+  This section will give you the options to customize your AD Forest install. 
+  Be sure to specify your certificate details and domain info.
+</p>
+
 ```powershell
 # Self signed certificate in the local computer certificate store
 $cert=Get-Item -Path 'Cert:\LocalMachine\My\F9R4936DE1DBC4D5CEB407C8DEA2E2A3EC8C9F32'
@@ -201,8 +210,8 @@ DomainInit -ConfigurationData $config `
 <p>
   You should have 2 files generated at this point. 
   One is a .mof file, the other is a meta.mof. 
-  The meta.mof file is to configure the Local Configuration Manager (LCM) 
-  on the target node (the Domain Controller). 
+  The meta.mof file is used to configure the Local Configuration Manager (LCM) 
+  on the target node (the local machine in this case). 
   The regular .mof file is the configuration document for your server.
 </p>
 
@@ -215,14 +224,16 @@ Start-DscConfiguration -Path C:\dsc\AD -Force -Wait -Verbose
 ```
 
 <p>
-  We configured the LCM to reboot if the configuration requires it. 
-  This means that the server should reboot to finalize the AD Forest install. 
-  When it comes back online, and completes the final configurations, 
-  you will have a new AD Forest created.
+  We configured the LCM to reboot if the configuration requires it, 
+  so the server should reboot to finalize the AD Forest installation. 
+  When it comes back online and completes the final configurations, 
+  you will have a new AD Forest created. 
+  Take a look at what Organizational Units are there, 
+  and of course what the server IP Address is.
 </p>
 
 <p>
-  This is just the tip of the iceberg for what can be accomplished with DSC. 
+  This is just the tip of the iceberg for what can be accomplished with Dsc. 
   This is also just the start for my posts about it. 
   Stay tuned.
 </p>
