@@ -1,6 +1,6 @@
 ---
 layout: post
-title: PowerShell - Encrypting Passwords Again
+title: PowerShell - Encrypting Passwords...Again
 ---
 
 I have covered working with passwords in PowerShell in a previous 
@@ -43,7 +43,7 @@ Write-Output $encrypted
 <p>
   You could use the Get-Random cmdlet to generate the key, 
   however it is more secure to use the RNGCryptoServiceProvider object 
-  as it will be more random in it's number generation. 
+  as it will be more random in its number generation. 
   Of course to be truly random, 
   you would want to be using something less controlled than the CPU's clock, 
   but that would potentially require special hardware and software.
@@ -53,7 +53,7 @@ Write-Output $encrypted
   Now to decrypt your string:
 </p>
 
-```
+```powershell
 $secure=ConvertTo-SecureString -String $encrypted -Key $key
 $tempCred=New-Object -TypeName PSCredential -ArgumentList 'temp',$secure
 
@@ -61,6 +61,11 @@ Write-Host "Decrypted String:"
 $tempCred.GetNetworkCredential().Password
 Remove-Variable tempCred
 ```
+
+<p>
+  I should point out that the -Key parameter will only accept a ByteArray with 
+  a bit length of either 128, 192, or 256.
+</p>
 
 <p>
   Armed with that simple example; we can make a general function for this:
@@ -193,6 +198,12 @@ Write-Output $encrypt
 # Decrypt
 ConvertFrom-EncryptedString -EncryptedString $encrypt -Key $key
 ```
+
+<p>
+  You will only be able to decrypt this string if you have the key that 
+  was used to encrypt it.  
+  You can try to generate a new random key and test the results.
+</p>
 
 #### Example 2
 ----
