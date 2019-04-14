@@ -64,7 +64,6 @@ Broadcast    : 10.148.72.255
 </p>
 
 #### Convert subnet mask to prefix length
-----
 
 <p>
   How does 255.255.255.0 translate to a prefix length of 24? 
@@ -109,7 +108,6 @@ Write-Output $binaryString.TrimEnd('0').Length
 ```
 
 #### Convert prefix length to subnet mask
-----
 
 <p>
   This one is pretty easy armed with the knowledge we have from the previous 
@@ -119,11 +117,11 @@ Write-Output $binaryString.TrimEnd('0').Length
 </p>
 
 ```powershell
-$PrefixLength=24
+$prefixLength=24
 
 # create as many 1s as the prefix length
 # use PadRight to add the needed 0s required to make it 32 long
-('1' * $PrefixLength).PadRight(32, '0')
+('1' * $prefixLength).PadRight(32, '0')
 ```
 
 <p>
@@ -134,7 +132,7 @@ $PrefixLength=24
 </p>
 
 ```powershell
-$bitString=('1' * $PrefixLength).PadRight(32,'0')
+$bitString=('1' * $prefixLength).PadRight(32,'0')
 
 $ipString=[String]::Empty
 
@@ -148,7 +146,6 @@ Write-Output $ipString.TrimEnd('.')
 ```
 
 #### Get network ID
-----
 
 <p>
   As long as you have an IP address and a prefix length or subnet mask, 
@@ -164,6 +161,7 @@ Write-Output $ipString.TrimEnd('.')
 </p>
 
 Mask:  1111111111111111111111111**0000000**
+
 IP:    1100000010101000110000001**0001110**
 
 NetID: 1100000010101000110000001**0000000**
