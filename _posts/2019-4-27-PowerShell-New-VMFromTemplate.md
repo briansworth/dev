@@ -149,10 +149,7 @@ Function New-VMFromTemplate {
   )
   Begin{
     Try{
-      # Change this as desired
-      $vmDefaultPath="C:\vm\$VMName"
-
-      Write-Verbose "Validating template / vm information..."
+      Write-Verbose "Validating template..."
       $templatePathExist=Test-Path -Path $TemplatePath
       if(!$templatePathExist){
         Write-Error -Message "Cannot find template path [$TemplatePath]" `
@@ -160,15 +157,6 @@ Function New-VMFromTemplate {
       }
 
       $templateVhd=Get-VHD -Path $TemplatePath -ErrorAction Stop
-
-      $newVHDPath="$vmDefaultPath\$($VMName).$($templateVhd.VhdFormat)"
-      $vmVHDExists=Test-Path -Path $newVHDPath
-
-      if($vmVHDExists){
-        Write-Error -Message "VM VHD already exists [$newVHDPath]" `
-          -Category ResourceExists `
-          -ErrorAction Stop
-      }
 
       if($PSBoundParameters.ContainsKey('SwitchName')){
         $vmSwitch=Get-VMSwitch -Name $SwitchName -ErrorAction SilentlyContinue
@@ -188,6 +176,19 @@ Function New-VMFromTemplate {
   }
   Process{
     Try{
+      Write-Verbose "Validating VM info..."
+      # Change this as desired
+      $vmDefaultPath="C:\vm\$VMName"
+
+      $newVHDPath="$vmDefaultPath\$($VMName).$($templateVhd.VhdFormat)"
+      $vmVHDExists=Test-Path -Path $newVHDPath
+
+      if($vmVHDExists){
+        Write-Error -Message "VM VHD already exists [$newVHDPath]" `
+          -Category ResourceExists `
+          -ErrorAction Stop
+      }
+
       $vmExist=Get-VM -VMName $VMName -ErrorAction SilentlyContinue
       if($vmExist){
         Write-Error -Message "VM already exists [$VMName]" `
