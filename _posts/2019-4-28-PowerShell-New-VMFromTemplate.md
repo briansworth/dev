@@ -85,6 +85,15 @@ but I didn't provide a function that could streamline the process.
   and before copying the template. 
 </p>
 
+```powershell
+# Example
+$vmName='dc'
+$vmPath="C:\vm\$vmName"
+if(!(Test-Path -Path $vmPath)){
+  New-Item -Path $vmPath -ItemType Container
+}
+```
+
 <p>
   <strong>Problem 2: Templates</strong><br>
   The template is the most important piece to this puzzle. 
@@ -96,6 +105,11 @@ but I didn't provide a function that could streamline the process.
   Running Get-VHD on the template path 
   will indicate if it is a valid file type.
 </p>
+
+```powershell
+$templatePath='C:\vm\template\core.vhdx'
+$templateVHD=Get-VHD -Path $templatePath
+```
 
 <p>
   <strong>Problem 3: Copying Template</strong><br>
