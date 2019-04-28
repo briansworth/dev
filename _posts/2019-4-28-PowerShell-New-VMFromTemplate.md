@@ -60,6 +60,7 @@ but I didn't provide a function that could streamline the process.
   Settings like Processor Count, Memory, and VM Generation 
   are generally the same across the board, 
   but there will be circumstances where I want to modify these defaults. 
+  Putting these settings as parameters should work nicely.
 </p>
 
 
@@ -105,7 +106,11 @@ but I didn't provide a function that could streamline the process.
 <p>
   <strong>Solution:</strong><br>
   Ensure the VM folder structure exists first. 
-  Copy the VHD file, then rename it according to the VM Name.
+  We should also ensure everything that could go wrong has been checked. 
+  We do not want to copy the whole file, 
+  only to have some error stop the process short. 
+  Once validation is complete, 
+  we can copy the file and rename it according to the VM name.
 </p>
 
 <p>
@@ -117,7 +122,9 @@ but I didn't provide a function that could streamline the process.
 <p>
   <strong>Solution:</strong><br>
   Specify all settings for the VM in the New-VM cmdlet. 
-  When the VM is created, use Set-VM for setting ProcessorCount.
+  When the VM is created, use Set-VM for setting ProcessorCount. 
+  All these settings should have default values, 
+  and be parameters for maximum flexibility.
 </p>
 
 ### Source Code
@@ -153,7 +160,8 @@ Function New-VMFromTemplate {
       $templatePathExist=Test-Path -Path $TemplatePath
       if(!$templatePathExist){
         Write-Error -Message "Cannot find template path [$TemplatePath]" `
-          -Category ObjectNotFound
+          -Category ObjectNotFound `
+          -ErrorAction Stop
       }
 
       $templateVhd=Get-VHD -Path $TemplatePath -ErrorAction Stop
