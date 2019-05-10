@@ -14,7 +14,7 @@ title: PowerShell - Networking with Windows Routing
 <p>
   Networking seems kind of like black magic. 
   I have never been too comfortable with, 
-  it so recently I've decided to just dive in and figure it out. 
+  it so recently I decided to dive in and figure it out. 
   I want to start by using basic built-in features in Windows, 
   then branch off from there.
 </p>
@@ -281,7 +281,8 @@ ping 10.0.0.5
 <p>
   Most environments are probably going to use 
   hardware routers for this kind of thing. 
-  For our small virtual lab in the future, it should be possible to a virtual 
+  For our small virtual lab in the future, 
+  it should be possible to deploy a virtual 
   router / firewall to get a more realistic environment.
 </p>
 
