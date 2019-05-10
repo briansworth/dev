@@ -19,13 +19,13 @@ title: PowerShell - Networking with Windows Routing
   then branch off from there.
 </p>
 
-A couple posts back,
-([here](http://codeandkeep.com/PowerShell-Get-Subnet-NetworkID/)) I wrote 
+A couple posts back
+([here](http://codeandkeep.com/PowerShell-Get-Subnet-NetworkID/)), I wrote 
 a function (Get-IPv4Subnet) that can calculate network subnets based 
 on certain parameters you provide. 
 
 <p>
-  Armed with this new found power to identify networks, 
+  Armed with the new found power to identify networks, 
   connecting networks together seems like the next logical step.
 </p>
 
@@ -35,12 +35,12 @@ on certain parameters you provide.
 You should have the following server setup:
   - Active Directory Forest
     - 1 or more Domain Controller(s)
-  - Test server on separate network
+  - 1 Test machine on separate network
     - Can be a base workstation or server
-  - **Server (core or gui) for RRAS**
-    - We will be configuring this one
+  - **1 Windows Server (core or gui) for RRAS**
+    - We will be doing most of the work on this one
 
-On your Hypervisor, you should have at least to network adapters. 
+On your Hypervisor, you should have at least to VM Switches. 
 You can quickly create an internal switch in Hyper-V like so:
 
 ```powershell
@@ -98,8 +98,9 @@ Network Adapter False          route  internal2  000000000000        {}
 
 <p>
   One more thing to take note of, 
-  is which NIC is assigned to your Domain Controller. 
-  You will need to specify the IP configuration with this information.
+  is which VM Switch is assigned to your Domain Controller. 
+  You will need to specify the IP configuration with this information 
+  (see the 'SwitchName' property below).
 </p>
 
 ```powershell
@@ -133,7 +134,7 @@ Network Adapter False          route  internal2  00155D38012E {Ok}   {}
 ```
 
 <p>
-  Cross reference your MAC Addresses inside the VM:
+  Cross reference your MAC addresses inside the VM:
 </p>
 
 ```powershell
@@ -147,8 +148,10 @@ Ethernet 2  Microsoft Hyper-V Network Adapter #3        8 Up       00-15-5D-38-0
 ```
 
 <p>
-  In this example, I can see that 'Ethernet' is my 'internal1' NIC in Hyper-V. 
-  This is the same switch that my DC is using. 
+  In this example, 
+  I can see that 'Ethernet' has the same MAC address as the VMNetwork adapter 
+  configured to use 'internal1' (MAC address: 00155D38012D). 
+  This is the same VM Switch that my DC is using. 
 </p>
 
 <p>
@@ -203,11 +206,13 @@ New-NetRoute -InterfaceIndex $nic.ifIndex `
   -NextHop 10.0.0.1
 ```
 
-#### Install RRAS roles
+### Install RRAS roles
+----
 
 <p>
-  Now to install the require Windows Features for the RRAS role, 
-  and install the routing service 
+  Back on our RRAS server, 
+  we will install the required Windows Features for the RRAS role. 
+  After that, we will install the routing service. 
 </p>
 
 ```powershell
@@ -266,15 +271,17 @@ Set-DnsClientServerAddress -InterfaceIndex $nic.ifIndex `
   -ServerAddresses 10.0.0.5
 
 # Now to test
-ping 10.0.0.5
-
 nslookup codeAndKeep.com
+# This should resolve to your DCs IP Address
+
+# If the DC's firewall accepts ping
+ping 10.0.0.5
 ```
 
 <p>
   Most environments are probably going to use 
   hardware routers for this kind of thing. 
-  For our virtual lab, it should be possible to a virtual 
+  For our small virtual lab in the future, it should be possible to a virtual 
   router / firewall to get a more realistic environment.
 </p>
 
