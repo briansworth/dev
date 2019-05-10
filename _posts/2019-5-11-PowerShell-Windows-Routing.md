@@ -187,6 +187,22 @@ Add-Computer -DomainCredential $domainCred `
   -NewName 'route'
 ```
 
+<p>
+  If we want other computers on either network 
+  to be able to route through this server, 
+  we should configure their Default Gateway if not done already. 
+  For example, if we want DNS to work across the networks, 
+  we should make sure our DC can reach the other network.
+</p>
+
+```powershell
+# On the DC, we can set the Default Gateway like so
+$nic=Get-NetAdapter
+New-NetRoute -InterfaceIndex $nic.ifIndex `
+  -DestinationPrefix '0.0.0.0/0' `
+  -NextHop 10.0.0.1
+```
+
 #### Install RRAS roles
 
 <p>
@@ -224,7 +240,11 @@ $features=@(
   'RSAT-RemoteAccess-Powershell'
 )
 Install-WindowsFeature -Name $features
+# You should get a warning saying a reboot is required
+```
 
+```powershell
+# After a reboot
 Install-RemoteAccess -VpnType RoutingOnly
 ```
 
@@ -254,6 +274,16 @@ nslookup codeAndKeep.com
 <p>
   Most environments are probably going to use 
   hardware routers for this kind of thing. 
-  For a small lab, it might be possible to install a more feature rich 
-  router / firewall as a VM to get a more realistic environment.
+  For our virtual lab, it should be possible to a virtual 
+  router / firewall to get a more realistic environment.
+</p>
+
+#### Final note
+----
+
+<p>
+  As enjoyable as it is manipulating IP Addresses, default gateways, 
+  and DNS addresses manually, 
+  there is a more automated and managable solution. 
+  Stay tuned for a post on a Dhcp Server deployment to offload this workload.
 </p>
