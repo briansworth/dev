@@ -4,6 +4,8 @@ jQuery(function() {
     this.field('id');
     this.field('title');
     this.field('content', { boost: 10 });
+    this.field('author');
+    this.field('categories');
   });
 
   // Get the generated search_data.json file so lunr.js can search it locally.
@@ -20,7 +22,7 @@ jQuery(function() {
 
   // Event when the form is submitted
   $("#site_search").submit(function(event){
-      event.preventDefault();
+      event.preventDefault(); // RTH: per Google, preventDefault() might be the culprit in Firefox
       var query = $("#search_box").val(); // Get the value for the text field
       var results = window.idx.search(query); // Get lunr to perform a search
       display_search_results(results); // Hand the results off to be displayed
