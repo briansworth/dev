@@ -37,12 +37,20 @@ title: Search
       cursor: pointer;
       font-size: 20px;
     }
+
+    .wrap{
+      width: 30%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
   </style>
 </head>
 
 <br/>&nbsp;
 <form action="get" id="site_search">
-<div>
+<div class="wrap">
   <div class="search">
     <input type="text" id="search_box" class="searchTerm" maxlength=120>
     <input type="submit" value=">_">
