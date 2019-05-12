@@ -44,6 +44,7 @@ jQuery(function() {
 
           // Build a snippet of HTML for this result
           var appendString = '<a href="' + item.url + '">' + item.title + '</a><br>';
+          var appendString = item.description + '<br>';
 
           // Add the snippet to the collection of results.
           $search_results.append(appendString);
