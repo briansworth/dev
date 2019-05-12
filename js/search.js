@@ -45,7 +45,7 @@ jQuery(function() {
           // Build a snippet of HTML for this result
           var appendString = '<a href="' + item.url + '">' + item.title + '</a><br>';
           if(item.description) {
-            var descriptionString = item.description + '<br>';
+            var descriptionString = item.description + '<br><br>';
           } else {
             var descriptionString = '<br>';
           }
