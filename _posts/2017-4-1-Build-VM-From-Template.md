@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Build a VM from a Template
+description: How to guide for creating a base image to use for faster VM deployments.
 ---
 
 Creating VMs from a base image can make your life a lot easier.  Not having to sit through and select the same options during an OS install is a big time save.  
