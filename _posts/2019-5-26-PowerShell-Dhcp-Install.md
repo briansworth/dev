@@ -1,6 +1,6 @@
 ---
 layout: post
-title: PowerShell - Dhcp Deployment for Multiple Networks
+title: PowerShell - Dhcp Install
 description: Step by step guide to install and configure a Windows DHCP Server
 ---
 
