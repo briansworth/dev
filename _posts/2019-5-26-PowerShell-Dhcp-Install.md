@@ -78,8 +78,6 @@ Set-DhcpServerv4DnsSetting -DynamicUpdates 'Always' `
 ```
 
 *NOTE: This setting above 'DeleteDnsRROnLeaseExpiry' also tells DHCP to remove DNS entries when a lease has expired.*
-*This will keep your DNS clean even after servers are decommisioned. *
-
 
 <p>
   A DHCP server can manage IP address leasing across multiple networks. 
