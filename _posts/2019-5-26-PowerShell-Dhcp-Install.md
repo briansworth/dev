@@ -77,9 +77,8 @@ Set-DhcpServerv4DnsSetting -DynamicUpdates 'Always' `
   -DeleteDnsRROnLeaseExpiry $true
 ```
 
-*NOTE: This setting above 'DeleteDnsRROnLeaseExpiry' 
-also tells DHCP to remove DNS entries when a lease has expired.  
-This will keep your DNS clean even after servers are decommisioned. *
+*NOTE: This setting above 'DeleteDnsRROnLeaseExpiry' also tells DHCP to remove DNS entries when a lease has expired.*
+*This will keep your DNS clean even after servers are decommisioned. *
 
 
 <p>
@@ -179,7 +178,7 @@ You can assign a static APIPA address to the NetAdapter as a quick fix*
 ----
 
 Before you run this code, ensure that you have the GetIPv4Subnet module imported. 
-As stated in the prereq section, you can get that module [here](https://github.com/briansworth/GetIPv4Address/blob/master/GetIPv4Subnet.psm1)
+As stated in the prereq section, you can get that module [here](https://github.com/briansworth/GetIPv4Address/blob/master/GetIPv4Subnet.psm1).
 
 ```powershell
 Install-WindowsFeature -Name DHCP
