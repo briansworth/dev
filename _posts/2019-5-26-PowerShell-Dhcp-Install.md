@@ -14,7 +14,7 @@ description: Step by step guide to install and configure a Windows DHCP Server
 
 <p>
   As always, you can skip ahead to the end for the source code. 
-  If you want to go through the journey with me of figuring this out, 
+  If you want to go through the journey of figuring this out with me, 
   be sure to read each section.
 </p>
 
@@ -27,8 +27,8 @@ I am assuming you have at least the following configuration setup:
     - You can use a DC for the DHCP role if you want
   - The DHCP Server should already be joined to the domain
     - If you are using an existing DC, this is already done
-  - My Get-IPv4Subnet command 
-    - [Here](https://github.com/briansworth/GetIPv4Address/blob/master/GetIPv4Subnet.psm1)
+  - My GetIPv4Subnet module
+    - On [GitHub](https://github.com/briansworth/GetIPv4Address/blob/master/GetIPv4Subnet.psm1)
     - Or from a previous [blog post]({{ site.baseurl }}/PowerShell-Get-Subnet-NetworkID/)
 
 ### The Journey
@@ -78,10 +78,12 @@ Set-DhcpServerv4DnsSetting -DynamicUpdates 'Always' `
 ```
 
 *NOTE: This setting above 'DeleteDnsRROnLeaseExpiry' 
-also tells DHCP to remove DNS entries when a lease has expired.*
+also tells DHCP to remove DNS entries when a lease has expired.  
+This will keep your DNS clean even after servers are decommisioned. *
+
 
 <p>
-  A DHCP server can manage IP addressing leasing across multiple networks. 
+  A DHCP server can manage IP address leasing across multiple networks. 
   It can also be customized to only lease out IP addresses in a certain range. 
   To accomplish this, you create 'Scopes'. 
   A scope will identify the network that it can lease out to,
@@ -102,7 +104,7 @@ Add-DhcpServerV4Scope -Name "Corp Net" `
 
 <p>
   This should create a scope with a 'ScopeID' of '10.0.0.0'. 
-  This means that when a new server is added to this network, 
+  With this scope setup, when a new server is added to this network, 
   the DHCP server will assign it an IP address between 
   10.0.0.50 and 10.0.0.200.
 </p>
@@ -115,7 +117,7 @@ Get-DhcpServerv4Scope
 <p>
   Assigning an IP address is great, 
   but we can go further than that. 
-  Setting the DNS servers addresses will make our lives easier.
+  Setting the DNS server addresses will make our lives easier.
 </p>
 
 ```powershell
@@ -169,15 +171,15 @@ your NetAdapter on your host may get a lease when you turn on your scope.
 This may cause your network connectivity to slow down on your host. 
 You can assign a static APIPA address to the NetAdapter as a quick fix*
 
-*Example: New-NetIPAddress -InterfaceAlias 'vEthernet (internal1)' `
-  -IPAddress -IPAddress 169.254.0.1*
+*Example: New-NetIPAddress -InterfaceAlias 'vEthernet (internal1)'
+  -IPAddress 169.254.0.1*
 
 
 ### The Code
 ----
 
 Before you run this code, ensure that you have the GetIPv4Subnet module imported. 
-As state in the prereq section, you can get that module [Here](https://github.com/briansworth/GetIPv4Address/blob/master/GetIPv4Subnet.psm1)
+As stated in the prereq section, you can get that module [here](https://github.com/briansworth/GetIPv4Address/blob/master/GetIPv4Subnet.psm1)
 
 ```powershell
 Install-WindowsFeature -Name DHCP
