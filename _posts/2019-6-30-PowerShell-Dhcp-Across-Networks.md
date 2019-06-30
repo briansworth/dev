@@ -25,7 +25,7 @@ To follow along with this guide you should have a setup with at least the follow
 - RRAS role installed on a server
   - Should be on it's own server
   - [Guide](https://codeandkeep.com/PowerShell-Windows-Routing/)
-- 1 test server on separate network
+- 1 test server on new network
 
 ### My setup
 ----
@@ -52,15 +52,15 @@ The configuration can be broken down into 3 steps:
   2. Create Dhcp scope for the new network
   3. Install and configure the Dhcp relay agent
 
+<p>
+  You can run all the code below directly from your RRAS server.
+</p>
+
 #### 1. Get Dhcp server information
 <p>
   We need to know the hostname or IP address of the Dhcp server. 
   We will also need to add a Dhcp scope for this new network 
-  (10.0.1.1 in this example).
-</p>
-
-<p>
-  You can run all the code directly from your RRAS server.
+  (10.0.1.0 in this example).
 </p>
 
 ```powershell
