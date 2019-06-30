@@ -1,7 +1,7 @@
 ---
 layout: post
-title: PowerShell - Setup Dhcp Across Networks
-description: How to use Windows Routing to enable a Dhcp server to work across different networks
+title: PowerShell - Dhcp Across Networks
+description: How to use Windows Routing to enable a Dhcp server to work across multiple networks
 ---
 
 <p>
