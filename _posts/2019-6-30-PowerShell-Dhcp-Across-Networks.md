@@ -35,7 +35,7 @@ To follow along with this guide you should have a setup with at least the follow
     - Has the Domain Controller (10.0.0.5)
     - Has the Dhcp server (10.0.0.3)
     - RRAS server: 
-      - IP address: 10.0.1.1
+      - IP address: 10.0.0.1
       - NetAdapter Name: Ethernet0
   - 10.0.1.0
     - Has the test server
