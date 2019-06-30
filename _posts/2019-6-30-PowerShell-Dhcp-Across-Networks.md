@@ -170,3 +170,23 @@ netsh -f $netshDhcpRelayPath
 ```powershell
 Get-NetAdapter | Restart-NetAdapter
 ```
+
+<p>
+  On your RRAS server, you can check the statistics of your relay agent. 
+  You can use this for troubleshooting or just to see some statistics. 
+</p>
+
+```
+netsh routing ip relay show ifstats
+```
+
+You should see something like this:
+![_config.yml]({{ site.baseurl }}/images/dhcpRelayIFStats.PNG)
+
+<p>
+  You can check your Dhcp server as well to see if a lease has been issued. 
+</p>
+
+```powershell
+Get-DhcpServerv4ScopeStatistics -ScopeID $newScope.ScopeId
+```
