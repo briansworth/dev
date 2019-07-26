@@ -362,7 +362,7 @@ config interface 'lan1'
 ```
 
 In this file, I have configured my 'wan' interface, 
-which is on the same network as my host machine,  
+which is on the same network as my host machine, 
 to use DHCP and be assigned an IP Address from my router. 
 My 'lan1' interface is using my internal VM Switch, giving it access
 to my VMs using the same VM Switch. 
