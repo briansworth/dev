@@ -35,7 +35,7 @@ you can setup Ubuntu incredibly easy following this
 
 Once you have a Linux VM configured, power it off and proceed to step 2.
 
-### Step2 : The VHD
+### Step 2 : The VHD
 ---
 
 Time to create the VHD file that we will use for the openWrt VM.
@@ -84,7 +84,7 @@ sudo curl http://downloads.openwrt.org/releases/18.06.1/targets/x86/64/openwrt-1
 sudo gzip -dk /tmp/openwrt-18.06.1.img.gz
 ```
 
-### Step 4: Write the OpenWRT Image to disk
+### Step 4: Write the OpenWRT Image to Disk
 ---
 
 We will need to identify the new disk we added to our Linux VM in step 2. 
@@ -140,11 +140,14 @@ Back on your Windows host machine:
 
 ```powershell
 # In PowerShell on your host machine
+
+# Remove VHD from your Linux VM
 Remove-VMHardDiskDrive -VMName $vmname `
   -ControllerType IDE `
   -ControllerNumber 0 `
   -ControllerLocation 1
 
+# Create openWRT VM
 New-VM -VMName $wrtName `
   -Path "V:\VMs\$wrtName" `
   -VHDPath $vhd.Path `
@@ -157,7 +160,7 @@ Start-VM $wrtName
 vmconnect localhost $wrtName
 ```
 
-It should do its configuration and boot into the OS
+It should do its configuration and boot into the OS. 
 After it has completed the boot, (you can press enter to get to the cmd line)
 you can run some commands to see what you have. 
 
@@ -269,8 +272,8 @@ sudo poweroff
 ### Step 8: Add VHD Back and Add Network Adapters
 ---
 
-After this, we are done playing hot-potatoe with this VHD file. 
-We can add it to our OpenWRT Vm for good this time. 
+After this, we are done playing hot-potato with this VHD file. 
+We can add it to our OpenWRT VM for good this time. 
 
 ```powershell
 # Back into the host powershell session
@@ -359,11 +362,11 @@ config interface 'lan1'
 ```
 
 In this file, I have configured my 'wan' interface, 
-to be on the same network as my host machine.  
-This allows it to be on my lab network with internet access,
-and be assigned an IP Address from my router. 
+which is on the same network as my host machine,  
+to use DHCP and be assigned an IP Address from my router. 
 My 'lan1' interface is using my internal VM Switch, giving it access
-to my VMs using the same VM Switch.
+to my VMs using the same VM Switch. 
+I will be assigning it a static IP, along with the other network configuration.
 
 <p>
   Once you have your network settings just right, restart the network deamon.
@@ -392,3 +395,4 @@ opkg install luci-ssl-openssl
 ```
 
 Now you can access the LUCI (web UI) over https in your browser.
+'https://10.0.0.1' for my example.
