@@ -37,7 +37,7 @@ I will be deploying the SUP on the primary site server in this post.
   PowerShell module. 
   It isn't in the normal paths available in the $ENV:PSModulePath variable. 
   There is a different environment variable that should be available though, 
-  $ENV:SMS_ADMINUI_PATH. 
+  $ENV:SMS_ADMIN_UI_PATH. 
 </p>
 
 <p>
@@ -138,7 +138,7 @@ I will add the Server 2019 and Sql Server 2017 products below:
 Set-CMSoftwareUpdatePointComponent -SiteCode $site.SiteCode `
   -AddProduct 'Windows Server 2019', 'Microsoft SQL Server 2017'
 
-Sync-CMSoftwareUpdate
+Sync-CMSoftwareUpdate -FullSync $true
 ```
 
 Now after waiting a while (10 minutes or more), 
@@ -152,7 +152,7 @@ Get-CMSoftwareUpdate
 ----
 
 So that is all there is to it. 
-If you are seeing error in the WCM.log file, 
+If you are seeing errors in the WCM.log file, 
 you can try rebooting your server and checking again. 
 Alternatively,
 you may need to look into the error message more to find out the issue.
@@ -171,7 +171,7 @@ but there is no validation in the script if the product is invalid.
 If the sync times out, try rebooting SCCM, and check the logs mentioned above.
 
 ```powershell
-[CmdletBinding(DefaultParameterSetName='WsusWID')]
+[CmdletBinding()]
 Param(
   [Parameter(Position=0)]
   [String]$SiteSystemServerName = $ENV:COMPUTERNAME,
