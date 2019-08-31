@@ -27,163 +27,14 @@ along with a quick post to explain the process.
 
 I will be deploying the SUP on the primary site server in this post.
 
-### The Journey
----
-
-<p>
-  A prerequisite for the SUP is Windows Server Update Services (WSUS). 
-  The server that you are going configure as the SUP will need the 
-  WSUS features installed, 
-  and some basic configuration done before the SUP can be deployed. 
-</p>
-
-There are 2 different ways to configure the WSUS database:
-1. Windows Internal Database (WID)
-2. SQL Server Database
-
-I will explore both options below, starting with the WID.
-
-#### WSUS Windows Internal Database
-----
-
-<p>
-  Using the WID is easy and a common deployment strategy. 
-  You would not want to use the WID if you required a 
-  load balanced WSUS solution. 
-</p>
-
-<p>
-  The UpdateServices-WidDB feature is needed for this configuration.
-</p>
-
-```powershell
-$updateFeatures = @(
-  'UpdateServices-WidDB',
-  'UpdateServices-Services',
-  'UpdateServices-RSAT',
-  'UpdateServices-API',
-  'UpdateServices-UI'
-)
-
-Install-WindowsFeature -Name $updateFeatures
-```
-
-**Post feature install configuration**
-
-```powershell
-# Create directory for WSUS storage
-$wsusContentPath = 'C:\wsus'
-New-Item -Path $wsusContentPath -ItemType Directory
-
-# Configure WSUS to use the WID in your specified location
-& 'C:\Program Files\Update Services\Tools\WsusUtil.exe' postinstall CONTENT_DIR=$wsusContentPath
-```
-
-<p>
-  Wsus is now setup with a WID to work with your SUP using.
-</p>
-
-#### WSUS SQL Database
-----
-
-<p>
-  Since SCCM already utilizes a SQL server, 
-  you can use the same one for WSUS. 
-</p>
-
-<p>
-  The UpdateServices-DB feature is needed for this configuration.
-</p>
-
-```powershell
-$updateFeatures = @(
-  'UpdateServices-DB',
-  'UpdateServices-Services',
-  'UpdateServices-RSAT',
-  'UpdateServices-API',
-  'UpdateServices-UI'
-)
-
-Install-WindowsFeature -Name $updateFeatures
-```
-
-**Post feature install configuration**
-
-```powershell
-# Create directory for WSUS storage
-$wsusContentPath = 'C:\wsus'
-New-Item -Path $wsusContentPath -ItemType Directory
-
-# Populate Sql server/instance details
-$sqlInstance = '' # Leave blank if default instance MSSQLSERVER
-$sqlServerName = $ENV:COMPUTERNAME
-
-$sqlInstanceName = "$sqlServerName\$sqlInstance"
-$sqlInstanceName = $sqlInstanceName.TrimEnd('\')
-
-# Configure WSUS to use the WID in your specified location
-New-Alias -Name WsusUtil -Value 'C:\Program Files\Update Services\Tools\WsusUtil.exe'
-
-WsusUtil postinstall SQL_INSTANCE_NAME=$sqlInstanceName CONTENT_DIR=$wsusContentPath
-```
-<p>
-  Wsus is now setup, with a SQL DB, to work with your SUP using.
-</p>
-
-
-#### Add the SUG
----
-
-<p>
-  With WSUS out of the way, we need to add the SUP role to our server. 
-  Regardless of whether you are adding the SUP
-</p>
-
-
-### The Script
----
-
-
-```powershell
-# Install Update Services features for SUP
-
-# change path as needed
-$wsusContentPath = 'C:\wsus'
-
-$updateFeatures = @(
-  'UpdateServices',
-  'UpdateServices-WidDB',
-  'UpdateServices-Services',
-  'UpdateServices-RSAT',
-  'UpdateServices-API',
-  'UpdateServices-UI'
-)
-
-Try{
-  Install-WindowsFeature -Name $updateFeatures -ErrorAction Stop
-
-  if(!(Test-Path -Path $wsusContentPath)){
-    New-Item -Path $wsusContentPath `
-      -ItemType Directory `
-      -Force `
-      -ErrorAction Stop | Out-Null
-  }
-
-  & 'C:\Program Files\Update Services\Tools\WsusUtil.exe' postinstall CONTENT_DIR=$wsusContentPath
-
-}Catch{
-  Write-Error -Exception $_.Exception `
-    -Category $_.CategoryInfo.Category
-}
-```
 
 ```powershell
 # You should be able to import the ConfigMgr PowerShell module like so
 Import-Module "$($ENV:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1"
 
 # Now you should have a CMSite PSDrive to use with your ConfigMgr module
-$smsDrive = Get-PSDrive -PSProvider CMSite -ErrorAction SilentlyContinue
-cd $smsDrive.Name
+$smsDrive = Get-PSDrive -PSProvider CMSite
+cd "$($smsDrive.Name):\"
 
 # Get your CM Site
 $site = Get-CMSite
@@ -194,7 +45,7 @@ $preRoles | Select RoleName
 ```
 
 With our PowerShell session setup to work with Sccm, 
-we can add our SUP to the server. 
+we can add our SUP role to Sccm.
 You will need the FQDN of the server to get it working.
 
 ```powershell

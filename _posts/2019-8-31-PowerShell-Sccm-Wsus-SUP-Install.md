@@ -58,7 +58,8 @@ Install-WindowsFeature -Name $updateFeatures
 
 After installing the required roles, 
 we need to configure it for proper use.
-**Post feature install configuration**
+
+**Post feature install configuration:**
 
 ```powershell
 # Create directory for WSUS storage
@@ -99,7 +100,8 @@ Install-WindowsFeature -Name $updateFeatures
 
 After installing the required roles, 
 we need to configure it for proper use.
-**Post feature install configuration**
+
+**Post feature install configuration:**
 
 ```powershell
 # Create directory for WSUS storage
