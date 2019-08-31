@@ -21,12 +21,29 @@ If you want to setup the SUP on a remote server,
 it will need to be up and running. 
 
 You should also have Wsus configured on the server you want to use
-for your Software Update Point.  
-I have created a script to accomplish this, 
-along with a quick post to explain the process.
+for your Software Update Point. I have created a script to accomplish this,
+(available on [GitHub](https://github.com/briansworth/Install-Sccm/blob/master/Install-SccmWsus.ps1))
+along with a small 
+[post]({{ site.baseurl }}/PowerShell-Sccm-Wsus-SUP-Install) to explain the process in more detail.
+
+
+### The Journey
+----
 
 I will be deploying the SUP on the primary site server in this post.
 
+<p>
+  The first thing we need to do is import the ConfigurationManager 
+  PowerShell module. 
+  It isn't in the normal paths available in the $ENV:PSModulePath variable. 
+  There is a different environment variable that should be available though, 
+  $ENV:SMS_ADMINUI_PATH. 
+</p>
+
+<p>
+  Once we have the module imported, we can start interacting with Sccm via 
+  PowerShell.
+</p>
 
 ```powershell
 # You should be able to import the ConfigMgr PowerShell module like so
@@ -35,7 +52,13 @@ Import-Module "$($ENV:SMS_ADMIN_UI_PATH)\..\ConfigurationManager.psd1"
 # Now you should have a CMSite PSDrive to use with your ConfigMgr module
 $smsDrive = Get-PSDrive -PSProvider CMSite
 cd "$($smsDrive.Name):\"
+```
 
+<p>
+  Now we can check what roles are currently installed.
+</p>
+
+```powershell
 # Get your CM Site
 $site = Get-CMSite
 
@@ -44,9 +67,13 @@ $preRoles = Get-CMSiteRole -SiteCode $site.SiteCode
 $preRoles | Select RoleName
 ```
 
-With our PowerShell session setup to work with Sccm, 
-we can add our SUP role to Sccm.
-You will need the FQDN of the server to get it working.
+Now we can add our SUP role to Sccm.
+You will need the FQDN of the server your want to deploy it to first. 
+In my case, I will be using the local Primary Site Server.
+
+*Note: If you are using a remote server for your SUP, 
+you will need to add it as a CMSiteSystemServer. 
+Use the 'New-CMSiteSystemServer' cmdlet for this before proceeding.*
 
 ```powershell
 # If you are not using the local Sccm server change computer name accordingly
@@ -114,12 +141,24 @@ Set-CMSoftwareUpdatePointComponent -SiteCode $site.SiteCode `
 Sync-CMSoftwareUpdate
 ```
 
-Now after waiting a while, 
+Now after waiting a while (10 minutes or more), 
 you should be able to see some software updates show up.
 
 ```powershell
 Get-CMSoftwareUpdate
 ```
+
+#### Review
+----
+
+So that is all there is to it. 
+If you are seeing error in the WCM.log file, 
+you can try rebooting your server and checking again. 
+Alternatively,
+you may need to look into the error message more to find out the issue.
+
+
+As usual, there is a script below that can do the whole thing for you.
 
 ### The Script
 ----
