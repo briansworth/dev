@@ -6,7 +6,7 @@ description: Install and configure WSUS for a SUP install
 
 In this one, we install and configure Wsus on a server. 
 This is a supplementary post to the 
-[SCCM Configure SUP](https://codeandkeep.com/PowerShell-Sccm-Configure-SUP/)
+[SCCM Configure SUP]({{ site.baseurl }}/PowerShell-Sccm-Configure-SUP/)
  post. 
 
 As usual, you can skip to the bottom to grap a script to do all
@@ -56,6 +56,8 @@ $updateFeatures = @(
 Install-WindowsFeature -Name $updateFeatures
 ```
 
+After installing the required roles, 
+we need to configure it for proper use.
 **Post feature install configuration**
 
 ```powershell
@@ -68,7 +70,7 @@ New-Item -Path $wsusContentPath -ItemType Directory
 ```
 
 <p>
-  Wsus is now setup with a WID to work with your SUP using.
+  Wsus is now setup with a WID to work with your SUP using a WID.
 </p>
 
 #### WSUS SQL Database
@@ -95,6 +97,8 @@ $updateFeatures = @(
 Install-WindowsFeature -Name $updateFeatures
 ```
 
+After installing the required roles, 
+we need to configure it for proper use.
 **Post feature install configuration**
 
 ```powershell
@@ -115,7 +119,7 @@ New-Alias -Name WsusUtil -Value 'C:\Program Files\Update Services\Tools\WsusUtil
 WsusUtil postinstall SQL_INSTANCE_NAME=$sqlInstanceName CONTENT_DIR=$wsusContentPath
 ```
 <p>
-  Wsus is now setup, with a SQL DB, to work with your SUP using.
+  Wsus is now setup, with a SQL DB, to work with your SUP using a SQL DB.
 </p>
 
 #### Review
