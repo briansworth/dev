@@ -10,13 +10,14 @@ It will allow you to protect a string with a password.
 #### Encryption Example
 ----
 
-Create a password as a secure string, and encrypt it using it.
+Create a password as a secure string, and encrypt it.
 
 ```powershell
 $password = Read-Host -AsSecureString
 $encrypted = Protect-AesString -String 'Encrypt me!_!' -Password $password
 
-Write-Output $encrypted.CipherText
+$encrypted.CipherText
+ag7sGO01sz/CXi7mHyK97A=
 ```
 
 #### Decryption Example
@@ -26,6 +27,7 @@ Decrypt the text from above using the same password.
 
 ```powershell
 $encrypted | Unprotect-AesString -Password $password
+Encrypt me!_!
 ```
 
 ----
@@ -39,10 +41,11 @@ or stick along for the journey of figuring this out.
 ----
 
 First things first, we need to generate a key to use for the encryption. 
-As mentioned above, I want the string password protected, 
-so we can generate a key using a password.
+As mentioned above, I want to use a password to protect my string. 
+So we need to generate a key using a password.
 
 #### Derive key from password
+----
 
 We can leverage the class Rfc2898DeriveBytes in .Net for this.
 To contruct this class we will need a salt, a password, 
@@ -77,7 +80,7 @@ $passDerive = New-Object Security.Cryptography.Rfc2898DeriveBytes `
   -ArgumentList @($password, $saltBytes, $iterations, 'SHA256')
 ```
 
-Now we can get our key out of this class
+Now we can get our key out of this class.
 
 ```powershell
 $keySize = 256
@@ -85,9 +88,11 @@ $key = $passDerive.GetBytes($keySize / 8)
 ```
 
 We have a key generated from our password. Fantastic!
-You could generate a key using the raw password, 
-but that is not the secure way of doing it. 
-Using this class we introduce entropy to make the process cryptographically sound.
+<p>
+  You could generate a key using the raw password, 
+  but that is not the secure way of doing it. 
+  Using this class we introduce entropy to make the process cryptographically sound.
+</p>
 
 
 #### Encrypt
@@ -128,7 +133,7 @@ $cryptoStream = New-Object -TypeName Security.Cryptography.CryptoStream `
 
 We now have a crypto stream object, ready with our key, 
 to write to our memory stream.
-Now to encrypt our string.
+Lets encrypt.
 
 ```powershell
 $string = 'Hello, World!'
@@ -145,15 +150,16 @@ Write-Output $encryptedString
 
 Looks like some random gibberish to me. Excellent.
 
-Something to note. You can re-run the code starting with creating a new cipher 
-to this point, and you will get a completely different encrypted string. 
+Something to note. 
+You can re-run the code (starting with generating a new cipher), 
+and you will get a completely different encrypted string. 
 Pretty neat!
 
 #### Decrypt
 ----
 
 We will re-use the cipher we generated above, 
-since it already has the IV and other properties that we need. 
+since it already has the properties that we need. 
 The process for decrypting is similar to the one used for encrypting.
 
 To create the decryptor, we will also need the key we generated above.
