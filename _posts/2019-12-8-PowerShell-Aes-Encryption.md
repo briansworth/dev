@@ -4,12 +4,8 @@ title: PowerShell - Aes Encryption
 description: Encrypt with Aes in PowerShell.
 ---
 
-### Overview
-----
-
 This post will go over a way to implement AES encryption with PowerShell.
 It will allow you to protect a string with a password.
-
 
 #### Encryption Example
 ----
@@ -32,6 +28,160 @@ Decrypt the text from above using the same password.
 $encrypted | Unprotect-AesString -Password $password
 ```
 
+----
+
+As always, you can jump ahead for the source code
+(or find it on [Github](https://github.com/briansworth/AesEncryption/) ),
+or stick along for the journey of figuring this out.
+
+
+### The Journey
+----
+
+First things first, we need to generate a key to use for the encryption. 
+As mentioned above, I want the string password protected, 
+so we can generate a key using a password.
+
+#### Derive key from password
+
+We can leverage the class Rfc2898DeriveBytes in .Net for this.
+To contruct this class we will need a salt, a password, 
+and some other things if more customization is needed.
+
+The salt needs to be represented in a byte array
+
+```powershell
+# Needs to be at least 8 bytes in length
+$salt = 'Salty123'
+$saltBytes = [Text.Encoding]::UTF8.GetBytes($salt)
+```
+
+Armed with our salt bytes, we can derive our password bytes.
+
+```powershell
+$password = 'P@ssw0rd1'
+$passDerive = New-Object Security.Cryptography.Rfc2898DeriveBytes `
+  -ArgumentList @($password, $saltBytes)
+```
+
+If you take a look at the variable $passDerive,
+you will see the default hash algorithm is SHA1, 
+and the number of iterations is 1000.
+This can be customized when constructing the object.
+
+We can specify the SHA256 hash algorithm and interation count like so:
+
+```powershell
+$iterations = 1000
+$passDerive = New-Object Security.Cryptography.Rfc2898DeriveBytes `
+  -ArgumentList @($password, $saltBytes, $iterations, 'SHA256')
+```
+
+Now we can get our key out of this class
+
+```powershell
+$keySize = 256
+$key = $passDerive.GetBytes($keySize / 8)
+```
+
+We have a key generated from our password. Fantastic!
+You could generate a key using the raw password, 
+but that is not the secure way of doing it. 
+Using this class we introduce entropy to make the process cryptographically sound.
+
+
+#### Encrypt
+----
+
+In .Net there are easy to use classes to handle the difficult stuff. 
+We can leverage the SymmetricAlgorithm class to create an object 
+that allows for encryption.  
+Using this class also allows for creating different objects for managing 
+different algorithms (like TripleDES, RC2, etc.).
+
+```powershell
+$cipher = [Security.Cryptography.SymmetricAlgorithm]::Create('AesManaged')
+Write-Output $cipher
+```
+
+You will notice that there is already a key created, 
+along with default values for key size, mode, and padding. 
+Additionally you will see the IV (initilization vector) property.
+When using the CBC cipher mode (which is what we are using), 
+it is best to generate a unique IV each time we encrypt something. 
+Luckily, this class generates one each time it is initialized, 
+but we will need to know what the IV is in order to decrypt it.
+
+
+Now to actually use this thing to encrypt some data.
+We will create an encryptor object using our key from above, 
+and the pre-generated IV.
+
+```powershell
+$iv = $cipher.IV
+$encryptor = $cipher.CreateEncryptor($key, $iv)
+
+$memoryStream = New-Object -TypeName IO.MemoryStream
+$cryptoStream = New-Object -TypeName Security.Cryptography.CryptoStream `
+  -ArgumentList @( $memoryStream, $encryptor, 'Write' )
+```
+
+We now have a crypto stream object, ready with our key, 
+to write to our memory stream.
+Now to encrypt our string.
+
+```powershell
+$string = 'Hello, World!'
+$strBytes = [Text.Encoding]::UTF8.GetBytes($string)
+
+$cryptoStream.Write($strBytes, 0, $strBytes.Length)
+$cryptoStream.FlushFinalBlock()
+$encryptedBytes = $memoryStream.ToArray()
+
+# Base64 Encode the encrypted bytes to get a string
+$encryptedString = [Convert]::ToBase64String($encryptedBytes)
+Write-Output $encryptedString
+```
+
+Looks like some random gibberish to me. Excellent.
+
+Something to note. You can re-run the code starting with creating a new cipher 
+to this point, and you will get a completely different encrypted string. 
+Pretty neat!
+
+#### Decrypt
+----
+
+We will re-use the cipher we generated above, 
+since it already has the IV and other properties that we need. 
+The process for decrypting is similar to the one used for encrypting.
+
+To create the decryptor, we will also need the key we generated above.
+
+```powershell
+$decryptor = $cipher.CreateDecryptor($key, $iv)
+
+# Get the bytes from the encrypted string
+$bytes = [Convert]::FromBase64String($encryptedString)
+
+# Create memory and crypto stream
+$stream = New-Object -TypeName IO.MemoryStream `
+  -ArgumentList @(, $encryptedBytes)
+$cryptoReader = New-Object -TypeName Security.Cryptography.CryptoStream `
+  -ArgumentList @( $stream, $decryptor, 'Read' )
+```
+
+We are now setup to read from the crypto stream using our decryptor.
+
+```powershell
+$decrypted = New-Object -TypeName Byte[] -ArgumentList $bytes.Length
+$decryptedByteCount = $cryptoReader.Read($decrypted, 0, $decrypted.Length)
+$decryptedString = [Text.Encoding]::UTF8.GetString($decrypted, 0, $decryptedByteCount)
+Write-Output $decryptedString
+```
+
+There you have it, AES encryption and decryption in PowerShell.
+For pre-made functions that do exactly this, see below.
 
 ### The Code
 
@@ -69,9 +219,10 @@ Function NewPasswordKey
   $passwordType = 'Security.Cryptography.Rfc2898DeriveBytes'
   $passwordDerive = New-Object -TypeName $passwordType `
     -ArgumentList @( 
-      $Password, 
+      $clearPass, 
       $saltBytes, 
-      $iterations
+      $iterations,
+      'SHA256'
     )
 
   $keyBytes = $passwordDerive.GetBytes($keySize / 8)
@@ -214,8 +365,9 @@ Function Unprotect-AesString
 }
 ```
 
+As promised, some more examples.
 
-#### Example:
+#### Example 1:
 ----
 
 ```powershell
@@ -225,3 +377,23 @@ $info = Protect-AesString -String "Keep this super safe!!" -Password $pass
 # Decrypt
 Unprotect-AesString -CipherInfo $info -Password $pass
 ```
+
+This example encrypts a string using the default salt, and the pasword specified.
+It decrypts the encrypted string using the default salt and the same password.
+
+#### Example 2:
+----
+
+```powershell
+$password = Read-Host -AsSecureString
+$secret = 'Super secret info...'
+$cipherInfo = Protect-AesString -String $secret -Password $password -Salt 'MoreSalt'
+$cipherInfo | ConvertTo-Json -Compress > ./nothingtosee.json
+
+$info = Get-Content ./nothingtosee.json | ConvertFrom-Json
+Unprotect-AesString -String $info.CipherText -Salt $info.Salt -InitializationVector $info.IV -Password $password
+```
+
+This example uses a custom salt for encryption. 
+It stores the output in a json file for safe keeping and re-use later.
+It then decrypts the stored string using the stored info and the password used to encrypt it.
