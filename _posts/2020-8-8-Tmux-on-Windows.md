@@ -4,7 +4,7 @@ title: Tmux on Windows
 description: Install and use Tmux on Windows, using the WSL
 ---
 
-I do a ton of work on the command line in Linux and Windows.
+I do a lot of work on the command line in Linux and Windows.
 One of my favorite apps that makes working on the command line more efficient is Tmux.
 There hasn't been anything quite like it in Windows, until now.
 
@@ -24,17 +24,17 @@ Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-L
 # If you want to upgrade to WSL2, do not reboot yet, otherwise reboot now
 ```
 
-*NOTE**: **If you are on Windows 2004 or later,*
+*NOTE: If you are on Windows 2004 or later,*
 *you should install WSL 2 for better performance / supportability.*
 
-*Second NOTE**: **If you are running this on a VM like VirtualBox,*
+*Second NOTE: If you are running this on a VM like VirtualBox,*
 *you will need to use WSL 1*
 
 ## Step 2 (Optional): Upgrade to WSL2
 
 ----
 
-Enable Virtual Machine Platform feature
+Enable the 'Virtual Machine Platform' Windows feature.
 
 ```powershell
 Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform
@@ -56,7 +56,7 @@ wsl --set-default-version 2
 
 In the Windows store, you can search for your preferred Linux distribution.
 Not all are available, 
-but I have successfully used Ubuntu, Debian, and Kali Linux
+but I have successfully used Ubuntu, Debian, and Kali Linux.
 
 ## Step 4 (Optional): Install Windows Terminal from the Windows store.
 
@@ -78,7 +78,7 @@ Complete the initial user setup:
 ![_config.yml]({{ site.baseurl }}/images/wsl-ubuntu-usersetup.png)
 
 
-## Step 6 (Optional): If you installed the Windows Terminal, 
+## Step 6 (Optional): Run the Linux Shell in the Windows Terminal
 
 ----
 
@@ -87,6 +87,24 @@ in the drop-down menu you should now have an option to select your Linux distro
 
 ![_config.yml]({{ site.baseurl }}/images/windowsterminal-shellselect.png)
 
+If you want to set this as your default shell in the Windows Terminal,
+you can update the settings `Ctrl + ,` to do so.
+
+Replace the GUID in `defaultProfile` with the one for your Linux app.
+You can find the GUID in the `list` section under `profiles`.
+
+You should see something like this:
+```
+    [
+        "guid": "{2c4de342-38b7-51cf-b940-2309a097f518}",
+        "hidden": false,
+        "name": "Ubuntu",
+        "source": "Windows.Terminal.Wsl"
+    ]
+```
+
+Set this GUID as the `defaultProfile`, 
+and this will be the shell that opens by default.
 
 ## Step 6: Install tmux
 
@@ -113,6 +131,7 @@ sudo apt install tmux
 ```bash
 tmux
 ```
+*If you are just getting started with Tmux, search for Tmux Cheatsheet for useful examples*
 
 ![_config.yml]({{ site.baseurl }}/images/tmuxandkeepcalm.png)
 
