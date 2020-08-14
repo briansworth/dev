@@ -6,7 +6,7 @@ description: Configure Tmux with VIM keys. Works on Windows and Linux
 
 Tmux is one of the most useful applications to use on Linux, 
 and if you read my [last post]({{ site.baseurl }}/Tmux-on-Windows/), 
-you now know how to get Tmux up and running on Windows too.
+you know how to get Tmux up and running on Windows too.
 As a VIM user (addict), I need to use the VIM keys everywhere possible, 
 and in this post, we will configure Tmux to do exactly that.
 
@@ -27,12 +27,12 @@ sudo apt install tmux
 [previous post]({{ site.baseurl }}/Tmux-on-Windows/) and then continue from here.
 
 
-### Disclaimer
+#### Disclaimer
 
 ----
 
-As a disclaimer, this guide will do more than just add VIM keys to Tmux;
-it will change the default Tmux prefix `Ctrl + b` to the backtick '```'. 
+This guide will do more than just add VIM keys to Tmux;
+it will change the default Tmux prefix `Ctrl + b` to the backtick '`'. 
 The new configuration makes use of Tmux plugins that make Tmux even better.
 I would recommend backing up your existing Tmux.conf file before continuing:
 
@@ -47,7 +47,9 @@ cp ~/.tmux.conf ~/.tmux.conf-backup
 
 I have a pre-set Tmux.conf file stored as a Gist in GitHub for Linux and Windows.
 
-[Linux Tmux config](https://gist.github.com/briansworth/9da664f15e51ca48ab5d7a0ac4a73cb2)
+#### Linux
+
+Here is the link for the [Linux Tmux config](https://gist.github.com/briansworth/9da664f15e51ca48ab5d7a0ac4a73cb2)
 
 Run the following to quickly install it on Linux.
 
@@ -62,7 +64,9 @@ fi
 curl $GIST_URL -o $TMUX_CONF
 ```
 
-[Windows Tmux config](https://gist.github.com/briansworth/b12f28f9a9e7bd42d9d7b67160079188)
+#### Windows
+
+Here is the link for the [Windows Tmux config](https://gist.github.com/briansworth/b12f28f9a9e7bd42d9d7b67160079188)
 
 Run the following to quickly install it on Windows.
 
@@ -78,6 +82,30 @@ if [ -f $TMUX_CONF ]; then
 fi
 curl $GIST_URL -o $TMUX_CONF
 ```
+
+### Install Tmux plugins
+
+----
+
+The Tmux configuration file we just installed references some plugins.
+The configuration will still work without installing them, 
+but I would recommend installing them. 
+More details to follow about how to use them.
+
+```bash
+# Download TPM (Tmux plugin manager) from github
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+```
+You now have the Tmux plugin manager that allows for easy plugin installation.
+Next step is to launch Tmux, and install the plugins referenced in the config file.
+
+```bash
+tmux
+```
+
+Press `` + I to install the plugins. 
+It will indicate when the install is completed.
+
 
 
 PowerLines tmux.conf:
