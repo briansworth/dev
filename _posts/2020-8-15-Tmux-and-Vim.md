@@ -103,7 +103,7 @@ Next step is to launch Tmux, and install the plugins referenced in the config fi
 tmux
 ```
 
-Press `` + I to install the plugins. 
+Press ` + I to install the plugins. 
 It will indicate when the install is completed.
 
 
