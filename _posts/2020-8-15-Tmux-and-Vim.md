@@ -171,13 +171,15 @@ this will also copy the selection to the system clipboard)
 
 **Plugins:**
 
-Tmux Yank:
+***Tmux Yank:***
 As indicated above, when copying text from the copy-mode buffer,
 the text will automatically be copied to the system clipboard. 
 
 Works on Linux and Windows (WSL); very useful.
 
-Tmux Resurrect:
+---
+
+***Tmux Resurrect:***
 Provides the ability to save and restore tmux sessions. 
 Even after a reboot or crash.
 
@@ -191,6 +193,17 @@ Save session: <code>` Ctrl + s</code>
 Restore session: <code>` Ctrl + r</code>
 
 *Press the prefix first, then Ctrl and r keys together.*
+
+
+**Appearance:**
+
+There are several changes to the default appearance of Tmux using this config.
+
+The most significant is the status bar being on top of the window.
+As for the other changes, you can see them. 
+
+You can always read through the tmux.conf file for comments on all changes,
+and tweak as needed.
 
 PowerLines tmux.conf:
 https://gist.github.com/briansworth/bd3d5d44b7e23982edf1847214ab1551
