@@ -33,7 +33,7 @@ sudo apt install tmux
 
 <p>
   This guide will do more than just add VIM keys to Tmux;
-  it will change the default Tmux prefix `Ctrl + b` to the backtick <code>`</code>. 
+  it will change the default Tmux prefix <code>Ctrl + b</code> to the backtick <code>`</code>. 
   Additionally, the new configuration references some useful Tmux plugins 
   (we will install these in this guide).
 </p>
@@ -52,9 +52,9 @@ I have a pre-set Tmux.conf file stored as a Gist in GitHub for Linux and Windows
 
 #### Linux
 
-Here is the link for the [Linux Tmux config](https://gist.github.com/briansworth/9da664f15e51ca48ab5d7a0ac4a73cb2)
+Here is the link for the [Linux Tmux config](https://gist.github.com/briansworth/9da664f15e51ca48ab5d7a0ac4a73cb2).
 
-Run the following to quickly install it on Linux.
+Run the following to quickly install it on Linux (or copy it manually).
 
 ```bash
 TMUX_CONF=~/.tmux.conf
@@ -69,9 +69,9 @@ curl $GIST_URL -o $TMUX_CONF
 
 #### Windows
 
-Here is the link for the [Windows Tmux config](https://gist.github.com/briansworth/b12f28f9a9e7bd42d9d7b67160079188)
+Here is the link for the [Windows Tmux config](https://gist.github.com/briansworth/b12f28f9a9e7bd42d9d7b67160079188).
 
-Run the following to quickly install it on Windows.
+Run the following to quickly install it on Windows (or copy it manually).
 
 *NOTE: You will need to be in a bash shell on your WSL Distro*
 
@@ -123,11 +123,49 @@ The rest of the guide will explain the VIM and plugin changes.
 
 ----
 
-*The Prefix:*
+**The Prefix:**
 <p>
-  Most importantly, the prefix is now the backtick <code>`</code>.
+  Most importantly, the prefix is now the backtick <code>`</code> 
+  (instead of the default <code>Ctrl + b</code>).
 </p>
 
+**Panes:**
+
+Split panes vertically: <code>` + |</code> (backtick + pipe)
+Split panes horizontally: <code>` + -</code> (backtick + minus)
+
+Move to pane:
+- Up    <code>` + k</code>
+- Down  <code>` + j</code>
+- Left  <code>` + h</code>
+- Right <code>` + l</code>
+
+Resize pane:
+- Up    <code>` + K</code>
+- Down  <code>` + J</code>
+- Left  <code>` + H</code>
+- Right <code>` + L</code>
+
+
+**Windows**
+
+Create a new window the same way: <code>` + c</code>
+
+Cycle through windows:
+- Left  `Ctrl + h`
+- Right `Ctrl + l`
+
+**Copy Mode**
+
+Get into copy mode as usual: <code>` + [</code>
+
+Use the VIM navigation keys while in the buffer.
+
+Begin text selection with v
+
+Yank text selection with y 
+(with the Tmux-yank plugin,
+this will also copy the selection to the system clipboard)
 
 PowerLines tmux.conf:
 https://gist.github.com/briansworth/bd3d5d44b7e23982edf1847214ab1551
