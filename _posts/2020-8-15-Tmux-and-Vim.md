@@ -16,8 +16,8 @@ and in this post, we will configure Tmux to do exactly that.
 
 If you are already experienced with Tmux, 
 you can grab my config files here (otherwise keep reading):
-- Linux: https://gist.github.com/briansworth/9da664f15e51ca48ab5d7a0ac4a73cb2
-- Windows: https://gist.github.com/briansworth/b12f28f9a9e7bd42d9d7b67160079188
+- Linux: [https://gist.github.com/briansworth/9da664f15e51ca48ab5d7a0ac4a73cb2](https://gist.github.com/briansworth/9da664f15e51ca48ab5d7a0ac4a73cb2)
+- Windows: [https://gist.github.com/briansworth/b12f28f9a9e7bd42d9d7b67160079188](https://gist.github.com/briansworth/b12f28f9a9e7bd42d9d7b67160079188)
 
 
 The final product:
