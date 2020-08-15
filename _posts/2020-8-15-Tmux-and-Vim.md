@@ -10,6 +10,21 @@ you know how to get Tmux up and running on Windows too.
 As a VIM user (addict), I need to use the VIM keys everywhere possible, 
 and in this post, we will configure Tmux to do exactly that.
 
+## Overview
+
+----
+
+If you are already experienced with Tmux, 
+you can grab my config files here (otherwise keep reading):
+- Linux: https://gist.github.com/briansworth/9da664f15e51ca48ab5d7a0ac4a73cb2
+- Windows: https://gist.github.com/briansworth/b12f28f9a9e7bd42d9d7b67160079188
+
+
+The final product:
+
+![_config.yml]({{ site.baseurl }}/images/tmux-vim.png)
+
+
 ## Prerequisites
 
 ----
@@ -116,7 +131,7 @@ If you see an error code 127,
 ensure you cloned the tmux-plugins/tpm repo to the correct directory (steps above).
 
 At this point, the configuration is completed.
-The rest of the guide will explain the VIM and plugin changes.
+The rest of the guide will explain the changes.
 
 
 ## What's New
