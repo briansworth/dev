@@ -31,10 +31,13 @@ sudo apt install tmux
 
 ----
 
-This guide will do more than just add VIM keys to Tmux;
-it will change the default Tmux prefix `Ctrl + b` to the backtick '`'. 
-The new configuration makes use of Tmux plugins that make Tmux even better.
-I would recommend backing up your existing Tmux.conf file before continuing:
+<p>
+  This guide will do more than just add VIM keys to Tmux;
+  it will change the default Tmux prefix `Ctrl + b` to the backtick <code>`</code>. 
+  Additionally, the new configuration references some useful Tmux plugins 
+  (we will install these in this guide).
+</p>
+  I would recommend backing up your existing Tmux.conf file before continuing:
 
 ```bash
 # Backup your existing config if necessary
@@ -96,6 +99,7 @@ More details to follow about how to use them.
 # Download TPM (Tmux plugin manager) from github
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 ```
+
 You now have the Tmux plugin manager that allows for easy plugin installation.
 Next step is to launch Tmux, and install the plugins referenced in the config file.
 
@@ -103,9 +107,26 @@ Next step is to launch Tmux, and install the plugins referenced in the config fi
 tmux
 ```
 
-Press ` + I to install the plugins. 
+<p>
+Press <code>` + I</code> to install the plugins. 
 It will indicate when the install is completed.
+</p>
 
+If you see an error code 127, 
+ensure you cloned the tmux-plugins/tpm repo to the correct directory (steps above).
+
+At this point, the configuration is completed.
+The rest of the guide will explain the VIM and plugin changes.
+
+
+## What's New
+
+----
+
+*The Prefix:*
+<p>
+  Most importantly, the prefix is now the backtick <code>`</code>.
+</p>
 
 
 PowerLines tmux.conf:
