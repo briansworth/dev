@@ -148,7 +148,7 @@ Resize pane:
 - Right: <code>` + L</code>
 
 
-**Windows**
+**Windows:**
 
 Create a new window the same way: <code>` + c</code>
 
@@ -156,7 +156,7 @@ Cycle through windows:
 - Left:  `Ctrl + h`
 - Right: `Ctrl + l`
 
-**Copy Mode**
+**Copy Mode:**
 
 Get into copy mode as usual: <code>` + [</code>
 
@@ -169,6 +169,28 @@ Yank text selection: `y`
 (with the Tmux-yank plugin,
 this will also copy the selection to the system clipboard)
 
+**Plugins:**
+
+Tmux Yank:
+As indicated above, when copying text from the copy-mode buffer,
+the text will automatically be copied to the system clipboard. 
+
+Works on Linux and Windows (WSL); very useful.
+
+Tmux Resurrect:
+Provides the ability to save and restore tmux sessions. 
+Even after a reboot or crash.
+
+It will save all panes and windows (in order) 
+and even certain programs that are running in said panes.
+
+Save session: <code>` Ctrl + s</code>
+
+*Press the prefix first, then Ctrl and s keys together.*
+
+Restore session: <code>` Ctrl + r</code>
+
+*Press the prefix first, then Ctrl and r keys together.*
 
 PowerLines tmux.conf:
 https://gist.github.com/briansworth/bd3d5d44b7e23982edf1847214ab1551
