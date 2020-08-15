@@ -177,7 +177,6 @@ the text will automatically be copied to the system clipboard.
 
 Works on Linux and Windows (WSL); very useful.
 
----
 
 ***Tmux Resurrect:***
 Provides the ability to save and restore tmux sessions. 
