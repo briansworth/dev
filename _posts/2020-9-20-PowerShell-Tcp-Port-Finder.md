@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Docker - Nginx Reverse Proxy
+title: Powershell - Simple TCP Port Finder
 description: Simple TCP port finder for PowerShell.
 ---
 
